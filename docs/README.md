@@ -41,7 +41,7 @@ ETD/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/agency/etd-system.git
+   git clone https://github.com/sxnuru/ETD
    cd etd-system
    ```
 

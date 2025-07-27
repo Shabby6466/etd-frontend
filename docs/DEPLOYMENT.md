@@ -55,7 +55,7 @@ sudo chmod 755 /var/www/etd-system
 **Clone Repository:**
 ```bash
 cd /var/www/etd-system
-git clone https://github.com/agency/etd-system.git .
+git clone https://github.com/sxnuru/ETD .
 ```
 
 **Install Dependencies:**
