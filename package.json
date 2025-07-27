@@ -1,0 +1,63 @@
+{
+  "name": "etd-system",
+  "version": "1.0.0",
+  "description": "Emergency Travel Document Management System for government agencies",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server . -p 8080 -o",
+    "dev": "live-server --port=3000 --entry-file=index.html",
+    "build": "npm run build:clean && npm run build:copy && npm run build:optimize",
+    "build:clean": "rimraf build/*",
+    "build:copy": "cpx \"src/**/*\" build/src && cpx \"public/**/*\" build/public && cpx \"index.html\" build",
+    "build:optimize": "npm run build:minify-css && npm run build:minify-js",
+    "build:minify-css": "postcss src/styles/**/*.css --use cssnano --dir build/src/styles",
+    "build:minify-js": "terser src/scripts/*.js --compress --mangle -o build/src/scripts/router.min.js",
+    "serve:build": "http-server build -p 8080 -o",
+    "lint": "eslint src/scripts/*.js",
+    "format": "prettier --write src/**/*.{html,css,js}",
+    "test": "echo \"No tests specified\" && exit 0",
+    "validate": "html-validate src/pages/**/*.html"
+  },
+  "keywords": [
+    "emergency-travel-document",
+    "government",
+    "passport",
+    "etd",
+    "authentication",
+    "dashboard"
+  ],
+  "author": "Government Agency",
+  "license": "ISC",
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "cssnano": "^5.1.15",
+    "eslint": "^8.0.0",
+    "html-validate": "^7.0.0",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0",
+    "prettier": "^2.8.0",
+    "rimraf": "^4.0.0",
+    "terser": "^5.16.0"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "IE 11"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agency/etd-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agency/etd-system/issues"
+  },
+  "homepage": "https://github.com/agency/etd-system#readme"
+} 

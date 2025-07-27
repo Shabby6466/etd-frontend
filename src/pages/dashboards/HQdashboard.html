@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HQ Dashboard</title>
+  <link rel="stylesheet" href="../../styles/pages/HQdashBoardstyles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="user-profile">
+      <div class="user-info">
+        <img class="user-avatar" src="../../../public/assets/login-logo 2 (1).png" alt="User Avatar" />
+       
+      </div>
+      <div class="dropdown-icon"></div>
+    </div>
+
+    <div class="main-panel">
+      <div class="header">
+        <div class="header-title">HQ Dashboard - ETD</div>
+      </div>
+
+      <div class="controls-section">
+        <div class="filter-controls">
+          <button class="control-button">
+            <span class="control-button-text">Filters</span>
+            <div class="control-icon"></div>
+          </button>
+          <button class="control-button">
+            <span class="control-button-text">Sort</span>
+            <div class="control-icon"></div>
+          </button>
+        </div>
+<!-- 
+        <button class="export-button">
+          <span class="control-button-text">Export</span>
+          <div class="control-icon"></div>
+        </button> -->
+
+        <div class="search-box">
+          <div class="search-icon"></div>
+          <input class="search-text" placeholder="Search" style="outline: none; border: none;"></input>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table-wrapper">
+          <!-- Header Row -->
+          <div class="column-header">Tracking ID</div>
+          <div class="column-header">Applicant Name</div>
+          <div class="column-header">CNIC</div>
+          <div class="column-header">Passport No.</div>
+          <div class="column-header">Verification Requirement</div>
+          <div class="column-header">Agency Verification</div>
+          <div class="column-header">Verification Status</div>
+          <div class="column-header">Actions</div>
+
+          <!-- Row 1 -->
+          <div class="table-cell">100001E</div>
+          <div class="table-cell">Leslie Alexander</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-red">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-red">In Progress</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+
+          <!-- Row 2 -->
+          <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+           <div class="table-cell">100001E</div>
+          <div class="table-cell">Brooklyn Simmons</div>
+          <div class="table-cell-small">61101-3082523-9</div>
+          <div class="table-cell-small">P4366918</div>
+          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
+          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
+          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+
+          <!-- Add more rows as needed -->
+        </div>
+      </div>
+
+      <div class="pagination">
+        <button class="pagination-dropdown"><span class="pagination-text">20</span><div class="control-icon"></div></button>
+        <div class="pagination-controls">
+          <button class="page-button"><div class="control-icon"></div></button>
+          <button class="page-button selected"><span class="page-button-text">1</span></button>
+          <button class="page-button"><span class="page-button-text">2</span></button>
+          <button class="page-button"><span class="page-button-text">3</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Processing Interface</title>
+    <link rel="stylesheet" href="../../styles/pages/HQviewStyle.css">
+</head>
+<body>
+    <div class="hq-view">
+        <!-- Back Button -->
+        <button class="back-button" style="
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: #525EB1;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        ">← Go Back</button>
+        
+        <!-- Logo -->
+        <img class="login-logo" src="../../../public/assets/login-logo.png" alt="Logo" />
+        
+        <!-- Background Image -->
+        <img class="bg-image" src="../../../public/assets/Gov.png" alt="Background" />
+        
+        <!-- Work Area -->
+        <div class="work-area"></div>
+        
+        <!-- ETD Data Card -->
+        <div class="etd-data-card card">
+            <div class="card-title">ETD DATA</div>
+            
+            <!-- MRZ 1 -->
+            <div class="input-field" style="left: 54px; top: 63px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">MRZ 1</div>
+                        <div class="input-value">ABC12345678</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doc Number -->
+            <div class="input-field" style="left: 54px; top: 127px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Doc Number</div>
+                        <div class="input-value">73747</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MRZ 2 -->
+            <div class="input-field" style="left: 477px; top: 66px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">MRZ 2</div>
+                        <div class="input-value">CDF98765432</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ETD Sheet Number -->
+            <div class="input-field" style="left: 477px; top: 127px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">ETD sheet Number</div>
+                        <div class="input-value">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nadra Details Card -->
+        <div class="nadra-details-card card">
+            <div class="card-title">Nadra Details</div>
+            <div class="separator" style="left: 51px; top: 62px;"></div>
+            
+            <!-- Profile Image -->
+            <img class="profile-image" style="left: 256px; top: 80px;" src="../../../public/assets/Rectangle 1.png" alt="Profile" />
+            
+            <!-- First Name -->
+            <div class="input-field" style="left: 57px; top: 74px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">First name</div>
+                        <div class="input-value">Faraz Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Last Name -->
+            <div class="input-field" style="left: 57px; top: 138px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Last Name</div>
+                        <div class="input-value">Asad Javed</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Father's Name -->
+            <div class="input-field" style="left: 56px; top: 202px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Fathers Name</div>
+                        <div class="input-value">Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mother's Name -->
+            <div class="input-field" style="left: 56px; top: 266px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Mothers Name</div>
+                        <div class="input-value">Mariam</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gender -->
+            <div class="input-field" style="left: 56px; top: 330px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Gender</div>
+                        <div class="input-value">Male</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Pakistan City -->
+            <div class="input-field" style="left: 52px; top: 394px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Date of Birth -->
+            <div class="input-field" style="left: 53px; top: 458px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Date of Birth</div>
+                        <div class="input-value">14-08-2005</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Birth Country -->
+            <div class="input-field" style="left: 53px; top: 522px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth Country</div>
+                        <div class="input-value">Pakistan</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Birth City -->
+            <div class="input-field" style="left: 53px; top: 586px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Profession -->
+            <div class="input-field" style="left: 53px; top: 650px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Profession</div>
+                        <div class="input-value">Student</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Pakistan Address -->
+            <div class="input-field" style="left: 53px; top: 714px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan Address</div>
+                        <div class="input-value">House 123 Street 123</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Passport Details Card -->
+        <div class="passport-details-card card">
+            <div class="card-title">Passport Details</div>
+            <div class="separator" style="left: 51px; top: 62px;"></div>
+            
+            <!-- Profile Image -->
+            <img class="profile-image" style="left: 256px; top: 74px;" src="../../../public/assets/Rectangle 1.png" alt="Profile" />
+            
+            <!-- First Name -->
+            <div class="input-field" style="left: 57px; top: 74px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">First name</div>
+                        <div class="input-value">Faraz Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Last Name -->
+            <div class="input-field" style="left: 57px; top: 138px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Last Name</div>
+                        <div class="input-value">Asad Javed</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Father's Name -->
+            <div class="input-field" style="left: 56px; top: 202px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Fathers Name</div>
+                        <div class="input-value">Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mother's Name -->
+            <div class="input-field" style="left: 56px; top: 266px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Mothers Name</div>
+                        <div class="input-value">Mariam</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gender -->
+            <div class="input-field" style="left: 56px; top: 330px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Gender</div>
+                        <div class="input-value">Male</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Pakistan City -->
+            <div class="input-field" style="left: 52px; top: 394px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Date of Birth -->
+            <div class="input-field" style="left: 53px; top: 458px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Date of Birth</div>
+                        <div class="input-value">14-08-2005</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Birth Country -->
+            <div class="input-field" style="left: 53px; top: 522px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth Country</div>
+                        <div class="input-value">Pakistan</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Birth City -->
+            <div class="input-field" style="left: 53px; top: 586px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Profession -->
+            <div class="input-field" style="left: 53px; top: 650px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Profession</div>
+                        <div class="input-value">Student</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Pakistan Address -->
+            <div class="input-field" style="left: 53px; top: 714px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan Address</div>
+                        <div class="input-value">House 123 Street 123</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Citizen Info Card -->
+        <div class="citizen-info-card card">
+            <!-- Citizen Number -->
+            <div class="input-field" style="left: 39px; top: 8px; width: 153px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Citizen Number</div>
+                        <div class="input-value">61101-3082523-9</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FIA Blacklist Label -->
+            <div style="position: absolute; left: 639px; top: 25px; color: black; font-size: 14px; font-family: Inter; font-weight: 500; line-height: 16px;">
+                FIA BLACKLIST:
+            </div>
+            
+            <!-- Status Tag -->
+            <div class="status-tag">
+                <div class="status-text">No</div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <button class="button button-primary send-printing-btn" onclick="openPopup()">Send For Printing</button>
+        <button class="button button-danger defer-btn" onclick="openPopup()">Defer</button>
+        <button class="button button-primary send-verification-btn">Send For Verification</button>
+        
+        <!-- Background Logo -->
+        <img style="width: 443px; height: 427px; position: absolute; left: 1154px; top: 492px;" src="../../../public/assets/DGIP-logo.png" alt="Background Logo" />
+    </div>
+    
+    <!-- Overlay and Popup -->
+    <div class="overlay" id="overlay" onclick="closePopup()">
+        <div class="popup" onclick="event.stopPropagation()">
+            <div class="popup-title">Recommend for Blacklist</div>
+            
+            <!-- Select Field -->
+            <div class="popup-field" style="left: 79px; top: 110px;">
+                <label class="popup-field-label">Recommend for Blacklist</label>
+                <select class="popup-dropdown" id="blacklistSelect">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            
+            <!-- Remarks Field -->
+            <div class="popup-field" style="left: 79px; top: 175px;">
+                <label class="popup-field-label">Remarks</label>
+                <input type="text" class="popup-input" id="remarksInput" placeholder="Enter remarks..." value="Deport Maha Ayub">
+            </div>
+            
+            <!-- Actions -->
+            <div class="popup-actions">
+                <button class="popup-button popup-button-cancel" onclick="closePopup()">Cancel</button>
+                <button class="popup-button popup-button-save" onclick="saveChanges()">Save changes</button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="popup-footer">
+                <button class="popup-footer-button">
+                    Send for Print
+                    <div style="width: 16px; height: 16px; content:''; background: url(assets/svgs/Icon\ Right.svg)"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('overlay').classList.add('active');
+        }
+        
+        function closePopup() {
+            document.getElementById('overlay').classList.remove('active');
+        }
+        
+        function saveChanges() {
+            const blacklistValue = document.getElementById('blacklistSelect').value;
+            const remarksValue = document.getElementById('remarksInput').value;
+            
+            if (!remarksValue.trim()) {
+                alert('Please enter remarks before saving.');
+                return;
+            }
+            
+            alert(`Changes saved successfully!\nRecommend for Blacklist: ${blacklistValue === 'yes' ? 'Yes' : 'No'}\nRemarks: ${remarksValue}`);
+            closePopup();
+        }
+        
+        // Close popup when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closePopup();
+            }
+        });
+    </script>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

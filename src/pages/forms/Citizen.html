@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emergency Travel Document</title>
+  <link rel="stylesheet" href="../../styles/pages/citizenStyles.css">
+</head>
+<body>
+  <div class="main-container">
+    <!-- Back Button -->
+    <button class="back-button" style="
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 8px 16px;
+        background: #525EB1;
+        color: white;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    ">← Go Back</button>
+    
+    <div class="background">
+      <img class="bg-img-left" src="../../../public/assets/Gov.png" />
+    </div>
+
+    <div class="content-box">
+      <div class="form-section">
+        <div class="form-input">
+         <div class="input-wrapper">
+  <label class="input-label" for="citizenNumber">Citizen Number</label>
+  <input
+    type="text"
+    id="citizenNumber"
+    name="citizenNumber"
+    class="input-value"
+    placeholder="Enter CNIC"
+    style="border: none; outline: none;"
+  />
+</div>
+
+        </div>
+      </div>
+
+      <div class="cancel-save-buttons">
+        <div class="btn cancel">Cancel</div>
+        <div class="btn save">Save changes</div>
+      </div>
+
+      <div class="footer-action">
+        <div class="btn get-data">
+          <button style="all: unset; cursor: pointer;  color: white;">
+            Get Data
+          </button>
+          <div class="arrow-icon"></div>
+        </div>
+      </div>
+
+      <div class="upload-delete-box">
+        <div class="btn upload">
+          <button id="BroswBtn" style="all: unset; cursor: pointer;  color: white;">
+            Browse
+          </button>
+          <div class="upload-icon"></div>
+        </div>
+        <div class="btn delete">
+          <button class="delete-icon" style="all: unset; cursor: pointer;  color: white;"></button>
+        </div>
+      </div>
+
+      <div class="title">Emergency Travel Document</div>
+      <img class="profile-img" src="../../../public/assets/Rectangle 1.png" />
+    </div>
+
+    <img class="header-logo" src="../../../public/assets/login-logo.png" />
+    <img class="top-right-decoration" src="../../../public/assets/DGIP-logo.png" />
+  </div>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

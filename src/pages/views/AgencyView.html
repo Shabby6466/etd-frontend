@@ -1,0 +1,884 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Processing Interface</title>
+    <link rel="stylesheet" href="../../styles/pages/AgencyViewStyles.css">
+</head>
+<body>
+    <style>
+        /* Add popup styles to your existing CSS */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-container {
+            width: 509px;
+            height: auto;
+            background: white;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.3s ease;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .popup-overlay.active .popup-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #676767;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .popup-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #454545;
+        }
+
+        .popup-header {
+            padding: 32px 32px 20px;
+            text-align: center;
+        }
+
+        .popup-title {
+            color: #454545;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .popup-content {
+            padding: 0 32px 32px;
+        }
+
+        .upload-area {
+            top: 20px;
+            width: 100%;
+            height: 202px;
+            background: rgba(207.57, 252.37, 252.88, 0.05);
+            border-radius: 4px;
+            border: 2px dashed rgba(82, 94, 177, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #525EB1;
+            background: rgba(207.57, 252.37, 252.88, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #525EB1;
+            background: rgba(82, 94, 177, 0.1);
+        }
+
+        .upload-icon {
+            margin-bottom: 16px;
+        }
+
+        .upload-icon svg {
+            width: 48px;
+            height: 48px;
+            fill: #525EB1;
+        }
+
+        .upload-text {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .upload-text-main {
+            color: #454545;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 24px;
+        }
+
+        .upload-text-browse {
+            color: #525EB1;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-formats {
+            color: #676767;
+            font-size: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 18px;
+            text-align: center;
+        }
+
+        .remarks-input {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .input-group-popup {
+            position: relative;
+        }
+
+        .input-field-popup {
+            width: 100%;
+            height: 48px;
+            padding: 20px 12px 6px;
+            background: white;
+            border: 1px solid #EBEBEB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: #19161D;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .input-field-popup:focus {
+            border-color: #525EB1;
+            box-shadow: 0 0 0 2px rgba(82, 94, 177, 0.1);
+        }
+
+        .input-label-popup {
+            position: absolute;
+            top: 6px;
+            left: 12px;
+            color: #53575A;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            pointer-events: none;
+        }
+
+        .submit-button {
+            width: 100%;
+            height: 45px;
+            background: #525EB1;
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background: #464a9a;
+            transform: translateY(-1px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-list.has-files {
+            display: block;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #454545;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #676767;
+        }
+
+        .file-remove {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .file-remove:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        /* Basic button styles for demo */
+        /* .button {
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        } */
+
+        /* .button-primary {
+            background: #28a745;
+            color: white;
+        } */
+
+        /* .button-primary:hover {
+            background: #218838;
+        } */
+
+        /* .button-danger {
+            background: #dc3545;
+            color: white;
+        } */
+/* 
+        .button-danger:hover {
+            background: #c82333;
+        } */
+
+        @media (max-width: 600px) {
+            .popup-container {
+                width: 95vw;
+                margin: 20px;
+            }
+            
+            .popup-header,
+            .popup-content {
+                padding: 20px;
+            }
+            
+            .upload-area {
+                height: 160px;
+            }
+        }
+    </style>
+    <div class="hq-view">
+        <!-- Back Button -->
+        <button class="back-button" style="
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: #525EB1;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        ">← Go Back</button>
+        
+        <!-- Logo -->
+        <img class="login-logo" src="../../../public/assets/login-logo.png" alt="Logo" />
+        
+        <!-- Background Image -->
+        <img class="bg-image" src="../../../public/assets/Gov.png" alt="Background" />
+        
+        <!-- Work Area -->
+        <div class="work-area"></div>
+        
+        <!-- ETD Data Card -->
+        <div class="etd-data-card card">
+            <div class="card-title">ETD DATA</div>
+            
+            <!-- MRZ 1 -->
+            <div class="input-field" style="left: 54px; top: 63px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">MRZ 1</div>
+                        <div class="input-value">ABC12345678</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doc Number -->
+            <div class="input-field" style="left: 54px; top: 127px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Doc Number</div>
+                        <div class="input-value">73747</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MRZ 2 -->
+            <div class="input-field" style="left: 477px; top: 66px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">MRZ 2</div>
+                        <div class="input-value">CDF98765432</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ETD Sheet Number -->
+            <div class="input-field" style="left: 477px; top: 127px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">ETD sheet Number</div>
+                        <div class="input-value">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nadra Details Card -->
+        <div class="nadra-details-card card">
+            <div class="card-title">Nadra Details</div>
+            <div class="separator" style="left: 51px; top: 62px;"></div>
+            
+            <!-- Profile Image -->
+            <img class="profile-image" style="left: 256px; top: 80px;" src="../../../public/assets/Rectangle 1.png" alt="Profile" />
+            
+            <!-- First Name -->
+            <div class="input-field" style="left: 57px; top: 74px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">First name</div>
+                        <div class="input-value">Faraz Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Last Name -->
+            <div class="input-field" style="left: 57px; top: 138px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Last Name</div>
+                        <div class="input-value">Asad Javed</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Father's Name -->
+            <div class="input-field" style="left: 56px; top: 202px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Fathers Name</div>
+                        <div class="input-value">Asad</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mother's Name -->
+            <div class="input-field" style="left: 56px; top: 266px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Mothers Name</div>
+                        <div class="input-value">Mariam</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gender -->
+            <div class="input-field" style="left: 56px; top: 330px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Gender</div>
+                        <div class="input-value">Male</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Pakistan City -->
+            <div class="input-field" style="left: 52px; top: 394px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            
+            <!-- Date of Birth -->
+            <div class="input-field" style="left: 53px; top: 458px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Date of Birth</div>
+                        <div class="input-value">14-08-2005</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+    
+            <!-- Birth Country -->
+            <div class="input-field" style="left: 53px; top: 522px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth Country</div>
+                        <div class="input-value">Pakistan</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Birth City -->
+            <div class="input-field" style="left: 53px; top: 586px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Profession -->
+            <div class="input-field" style="left: 53px; top: 650px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Profession</div>
+                        <div class="input-value">Student</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Pakistan Address -->
+            <div class="input-field" style="left: 53px; top: 714px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan Address</div>
+                        <div class="input-value">House 123 Street 123</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Passport Details Card -->
+        <div class="passport-details-card card">
+            <div class="card-title">Passport Details</div>
+            <div class="separator" style="left: 51px; top: 62px;"></div>
+            <!-- Profile Image -->
+            <img class="profile-image" style="left: 256px; top: 74px;" src="../../../public/assets/Rectangle 1.png" alt="Profile" />
+            <!-- First Name -->
+            <div class="input-field" style="left: 57px; top: 74px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">First name</div>
+                        <div class="input-value">Faraz Asad</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Last Name -->
+            <div class="input-field" style="left: 57px; top: 138px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Last Name</div>
+                        <div class="input-value">Asad Javed</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Father's Name -->
+            <div class="input-field" style="left: 56px; top: 202px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Fathers Name</div>
+                        <div class="input-value">Asad</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mother's Name -->
+            <div class="input-field" style="left: 56px; top: 266px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Mothers Name</div>
+                        <div class="input-value">Mariam</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Gender -->
+            <div class="input-field" style="left: 56px; top: 330px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Gender</div>
+                        <div class="input-value">Male</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Pakistan City -->
+            <div class="input-field" style="left: 52px; top: 394px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Date of Birth -->
+            <div class="input-field" style="left: 53px; top: 458px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Date of Birth</div>
+                        <div class="input-value">14-08-2005</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Birth Country -->
+            <div class="input-field" style="left: 53px; top: 522px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth Country</div>
+                        <div class="input-value">Pakistan</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Birth City -->
+            <div class="input-field" style="left: 53px; top: 586px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Birth City</div>
+                        <div class="input-value">Islamabad</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Profession -->
+            <div class="input-field" style="left: 53px; top: 650px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Profession</div>
+                        <div class="input-value">Student</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+            <!-- Pakistan Address -->
+            <div class="input-field" style="left: 53px; top: 714px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Pakistan Address</div>
+                        <div class="input-value">House 123 Street 123</div>
+                    </div>
+                    <div class="select-dropdown"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Citizen Info Card -->
+        <div class="citizen-info-card card">
+            <!-- Citizen Number -->
+            <div class="input-field" style="left: 39px; top: 8px; width: 153px;">
+                <div class="input-container">
+                    <div class="input-content">
+                        <div class="input-label">Citizen Number</div>
+                        <div class="input-value">61101-3082523-9</div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIA Blacklist Label -->
+            <div style="position: absolute; left: 639px; top: 25px; color: black; font-size: 14px; font-family: Inter; font-weight: 500; line-height: 16px;">
+                FIA BLACKLIST:
+            </div>
+            <!-- Status Tag -->
+            <div class="status-tag">
+                <div class="status-text">No</div>
+            </div>
+        </div>
+        <!-- Action Buttons -->
+        <button class="button button-primary send-printing-btn trigger-popup" >Verified</button>
+        <button class="button button-danger defer-btn trigger-popup" >Not Verified</button>
+        <!-- Background Logo -->
+        <img style="width: 443px; height: 427px; position: absolute; left: 1154px; top: 492px;" src="../../../public/assets/DGIP-logo.png" alt="Background Logo" />
+    </div>
+
+    <script>
+        console.log('Script starting...');
+
+        // Simple popup functionality without classes - this should work
+        let popupInstance = null;
+        let selectedFiles = [];
+
+        function initPopup() {
+            console.log('Initializing popup...');
+            
+            // Create popup HTML
+            const popupHTML = `
+                <div class="popup-overlay" id="popup-overlay">
+                    <div class="popup-container">
+                        <button class="popup-close" id="popup-close">&times;</button>
+                        
+                        <div class="popup-header">
+                            <h2 class="popup-title" id="popup-title">Upload</h2>
+                        </div>
+                        
+                        <div class="popup-content">
+                            <div class="upload-area" id="upload-area">
+                                <div class="upload-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="upload-text">
+                                    <span class="upload-text-main">Drag & drop files or </span>
+                                    <span class="upload-text-browse" id="browse-text">Browse</span>
+                                </div>
+                                <div class="upload-formats">
+                                    Supported formats: JPEG, PNG, PDF, PSD, AI, Word, PPT
+                                </div>
+                                <input type="file" class="hidden-file-input" id="file-input" multiple accept=".jpg,.jpeg,.png,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx">
+                            </div>
+                            
+                            <div class="file-list" id="file-list"></div>
+                            
+                            <div class="remarks-input">
+                                <div class="input-group-popup">
+                                    <input type="text" class="input-field-popup" id="remarks-field" placeholder=" ">
+                                    <label class="input-label-popup">Remarks</label>
+                                </div>
+                            </div>
+                            
+                            <button class="submit-button" id="submit-button">
+                                Send letter & remarks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', popupHTML);
+            bindPopupEvents();
+            console.log('Popup created and events bound');
+        }
+
+        function bindPopupEvents() {
+            // Button click handlers - using event delegation
+            document.addEventListener('click', function(e) {
+                console.log('Click detected on:', e.target);
+                
+                if (e.target.classList.contains('trigger-popup') || e.target.closest('.trigger-popup')) {
+                    console.log('Popup trigger clicked');
+                    const button = e.target.classList.contains('trigger-popup') ? e.target : e.target.closest('.trigger-popup');
+                    const title = button.getAttribute('data-popup-title');
+                    openPopup(title);
+                }
+
+                if (e.target.id === 'popup-close') {
+                    closePopup();
+                }
+
+                if (e.target.id === 'upload-area' || e.target.closest('#upload-area')) {
+                    document.getElementById('file-input').click();
+                }
+
+                if (e.target.id === 'browse-text') {
+                    e.stopPropagation();
+                    document.getElementById('file-input').click();
+                }
+
+                if (e.target.id === 'submit-button') {
+                    handleSubmit();
+                }
+            });
+
+            // Close popup when clicking overlay
+            document.addEventListener('click', function(e) {
+                if (e.target.id === 'popup-overlay') {
+                    closePopup();
+                }
+            });
+
+            // Close popup with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePopup();
+                }
+            });
+
+            // File input change
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'file-input') {
+                    handleFiles(e.target.files);
+                }
+            });
+
+            // Drag and drop
+            document.addEventListener('dragover', function(e) {
+                if (e.target.id === 'upload-area' || e.target.closest('#upload-area')) {
+                    e.preventDefault();
+                    document.getElementById('upload-area').classList.add('dragover');
+                }
+            });
+
+            document.addEventListener('dragleave', function(e) {
+                if (e.target.id === 'upload-area') {
+                    document.getElementById('upload-area').classList.remove('dragover');
+                }
+            });
+
+            document.addEventListener('drop', function(e) {
+                if (e.target.id === 'upload-area' || e.target.closest('#upload-area')) {
+                    e.preventDefault();
+                    document.getElementById('upload-area').classList.remove('dragover');
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+        }
+
+        function openPopup(title) {
+            console.log('Opening popup with title:', title);
+            const overlay = document.getElementById('popup-overlay');
+            const titleElement = document.getElementById('popup-title');
+            
+            if (titleElement) titleElement.textContent = title;
+            if (overlay) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePopup() {
+            console.log('Closing popup');
+            const overlay = document.getElementById('popup-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(resetForm, 300);
+            }
+        }
+
+        function resetForm() {
+            const fileInput = document.getElementById('file-input');
+            const remarksField = document.getElementById('remarks-field');
+            
+            if (fileInput) fileInput.value = '';
+            if (remarksField) remarksField.value = '';
+            
+            selectedFiles = [];
+            updateFileList();
+        }
+
+        function handleFiles(files) {
+            console.log('Handling files:', files.length);
+            for (let file of files) {
+                if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            }
+            updateFileList();
+        }
+
+        function updateFileList() {
+            const fileList = document.getElementById('file-list');
+            if (!fileList) return;
+            
+            if (selectedFiles.length === 0) {
+                fileList.classList.remove('has-files');
+                fileList.innerHTML = '';
+                return;
+            }
+
+            fileList.classList.add('has-files');
+            fileList.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div>
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${formatFileSize(file.size)}</div>
+                    </div>
+                    <button class="file-remove" onclick="removeFile(${index})">&times;</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function handleSubmit() {
+            const remarks = document.getElementById('remarks-field').value;
+            const fileNames = selectedFiles.map(file => file.name).join(', ');
+
+            alert(`Form submitted!\nFiles (${selectedFiles.length}): ${fileNames || 'None'}\nRemarks: ${remarks || 'None'}`);
+            closePopup();
+        }
+
+        // Initialize when DOM is ready
+               if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPopup);
+        } else {
+            initPopup();
+        }
+    </script>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

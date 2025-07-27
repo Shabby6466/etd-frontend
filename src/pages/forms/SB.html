@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send for Verification</title>
+    <link rel="stylesheet" href="../../styles/pages/SBstyles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Add popup styles to your existing CSS */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        .popup-container {
+            width: 509px;
+            height: auto;
+            background: white;
+            border-radius: 16px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.3s ease;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .popup-overlay.active .popup-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #676767;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .popup-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #454545;
+        }
+
+        .popup-header {
+            padding: 32px 32px 20px;
+            text-align: center;
+        }
+
+        .popup-title {
+            color: #454545;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .popup-content {
+            padding: 0 32px 32px;
+        }
+        .popup-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #454545;
+        }
+
+        .upload-area {
+            width: 100%;
+            height: 202px;
+            background: rgba(207.57, 252.37, 252.88, 0.05);
+            border-radius: 4px;
+            border: 2px dashed rgba(82, 94, 177, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #525EB1;
+            background: rgba(207.57, 252.37, 252.88, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #525EB1;
+            background: rgba(82, 94, 177, 0.1);
+        }
+
+        .upload-icon {
+            margin-bottom: 16px;
+        }
+
+        .upload-icon svg {
+            width: 48px;
+            height: 48px;
+            /* fill: #525EB1; */
+        }
+
+        .upload-text {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .upload-text-main {
+            color: #454545;
+            font-size: 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            line-height: 24px;
+        }
+
+        .upload-text-browse {
+            color: #525EB1;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-formats {
+            color: #676767;
+            font-size: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 400;
+            line-height: 18px;
+            text-align: center;
+        }
+
+        .remarks-input {
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        .input-group-popup {
+            position: relative;
+        }
+
+        .input-field-popup {
+            width: 100%;
+            height: 48px;
+            padding: 20px 12px 6px;
+            background: white;
+            border: 1px solid #EBEBEB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: #19161D;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .input-field-popup:focus {
+            border-color: #525EB1;
+            box-shadow: 0 0 0 2px rgba(82, 94, 177, 0.1);
+        }
+
+        .input-label-popup {
+            position: absolute;
+            top: 6px;
+            left: 12px;
+            color: #53575A;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            pointer-events: none;
+        }
+
+        .submit-button {
+            width: 100%;
+            height: 45px;
+            background: #525EB1;
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:hover {
+            background: #464a9a;
+            transform: translateY(-1px);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .hidden-file-input {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .file-list.has-files {
+            display: block;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #454545;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #676767;
+        }
+
+        .file-remove {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .file-remove:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            .popup-container {
+                width: 95vw;
+                margin: 20px;
+            }
+            
+            .popup-header,
+            .popup-content {
+                padding: 20px;
+            }
+            
+            .upload-area {
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="background-overlay">
+            <img class="background-image-left" src="../../../public/assets/Gov.png" alt="Background decoration" />
+        </div>
+        
+        <img class="login-logo" src="../../../public/assets/login-logo.png" alt="Logo" />
+        
+        <div class="content-card">
+            <div class="content">
+                <div class="general-information">
+                    <h1 class="title">Send For Verification</h1>
+                </div>
+                
+                <div class="form-section">
+                    <div class="input-group full-width">
+                        <div class="input-field filled">
+                            <div class="input-container">
+                                <div class="input-content">
+                                    <label class="input-label">Tracking ID</label>
+                                    <div class="input-value">10001E</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-section">
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="specialBranch" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Special Branch
+                            </label>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="intelligenceBureau" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Intelligence Bureau
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="select-group" id="provinceSelect" style="display: none;">
+                        <div class="input-field">
+                            <div class="input-container">
+                                <div class="input-content">
+                                    <label class="input-label">Select Province</label>
+                                    <select class="select-input">
+                                        <option value="">Choose Province</option>
+                                        <option value="PK">Punjab (PK)</option>
+                                        <option value="SD">Sindh (SD)</option>
+                                        <option value="KP">Khyber Pakhtunkhwa (KP)</option>
+                                        <option value="BL">Balochistan (BL)</option>
+                                        <option value="GB">Gilgit-Baltistan (GB)</option>
+                                        <option value="AJK">Azad Jammu and Kashmir (AJK)</option>
+                                    </select>
+                                </div>
+                                <div class="chevron-down">
+                                    <div class="chevron-vector"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-nav">
+                    <div class="nav-buttons">
+                        <button class="btn btn-secondary">Go Back</button>
+                        <button class="btn btn-primary trigger-popup" data-popup-title="Send for Verification">
+                            Send
+                            <div class="arrow-icon"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <img class="background-image-right" src="../../../public/assets/DGIP-logo.png" alt="Background decoration" />
+    </div>
+
+    <script>
+        // Show/hide province select based on Special Branch checkbox
+        document.getElementById('specialBranch').addEventListener('change', function() {
+            const provinceSelect = document.getElementById('provinceSelect');
+            if (this.checked) {
+                provinceSelect.style.display = 'block';
+            } else {
+                provinceSelect.style.display = 'none';
+            }
+        });
+
+        // Popup functionality
+        class ReusablePopup {
+            constructor() {
+                this.overlay = null;
+                this.isOpen = false;
+                this.selectedFiles = [];
+                this.init();
+            }
+
+            init() {
+                this.createPopupHTML();
+            }
+
+            createPopupHTML() {
+                const popupHTML = `
+                    <div class="popup-overlay" id="popup-overlay">
+                        <div class="popup-container">
+                            <button class="popup-close" id="popup-close">&times;</button>
+                            
+                            <div class="popup-header">
+                                <h2 class="popup-title" id="popup-title">Upload</h2>
+                            </div>
+                            
+                            <div class="popup-content">
+                                <div class="upload-area" id="upload-area">
+                                    <div class="upload-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="upload-text">
+                                        <span class="upload-text-main">Drag & drop files or </span>
+                                        <span class="upload-text-browse" id="browse-text">Browse</span>
+                                    </div>
+                                    <div class="upload-formats">
+                                        Supported formats: JPEG, PNG, PDF, PSD, AI, Word, PPT
+                                    </div>
+                                    <input type="file" class="hidden-file-input" id="file-input" multiple accept=".jpg,.jpeg,.png,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx">
+                                </div>
+                                
+                                <div class="file-list" id="file-list"></div>
+                                
+                                <div class="remarks-input">
+                                    <div class="input-group-popup">
+                                        <input type="text" class="input-field-popup" id="remarks-field" placeholder=" ">
+                                        <label class="input-label-popup">Remarks</label>
+                                    </div>
+                                </div>
+                                
+                                <button class="submit-button" id="submit-button">
+                                    Send letter & remarks
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+                setTimeout(() => {
+                    this.overlay = document.getElementById('popup-overlay');
+                    this.bindEvents();
+                    console.log('Popup initialized successfully');
+                }, 0);
+            }
+
+            bindEvents() {
+                // Trigger buttons - Handle nested elements properly
+                document.addEventListener('click', (e) => {
+                    // Check if clicked element or any parent has trigger-popup class
+                    let targetElement = e.target.closest('.trigger-popup');
+                    
+                    if (targetElement) {
+                        console.log('Popup triggered on:', targetElement);
+                        const title = targetElement.dataset.popupTitle || 'Upload';
+                        this.open(title);
+                    }
+                });
+
+                const closeBtn = document.getElementById('popup-close');
+                closeBtn.addEventListener('click', () => this.close());
+
+                this.overlay.addEventListener('click', (e) => {
+                    if (e.target === this.overlay) {
+                        this.close();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.isOpen) {
+                        this.close();
+                    }
+                });
+
+                const uploadArea = document.getElementById('upload-area');
+                const fileInput = document.getElementById('file-input');
+                const browseText = document.getElementById('browse-text');
+
+                uploadArea.addEventListener('click', () => fileInput.click());
+                browseText.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    fileInput.click();
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    this.handleFiles(e.target.files);
+                });
+
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    this.handleFiles(e.dataTransfer.files);
+                });
+
+                document.getElementById('submit-button').addEventListener('click', () => {
+                    this.handleSubmit();
+                });
+            }
+
+            open(title = 'Upload') {
+                document.getElementById('popup-title').textContent = title;
+                this.overlay.classList.add('active');
+                this.isOpen = true;
+                document.body.style.overflow = 'hidden';
+            }
+
+            close() {
+                this.overlay.classList.remove('active');
+                this.isOpen = false;
+                document.body.style.overflow = '';
+                
+                setTimeout(() => this.resetForm(), 300);
+            }
+
+            resetForm() {
+                document.getElementById('file-input').value = '';
+                document.getElementById('remarks-field').value = '';
+                this.selectedFiles = [];
+                this.updateFileList();
+            }
+
+            handleFiles(files) {
+                for (let file of files) {
+                    if (!this.selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                        this.selectedFiles.push(file);
+                    }
+                }
+                this.updateFileList();
+            }
+
+            updateFileList() {
+                const fileList = document.getElementById('file-list');
+                
+                if (this.selectedFiles.length === 0) {
+                    fileList.classList.remove('has-files');
+                    fileList.innerHTML = '';
+                    return;
+                }
+
+                fileList.classList.add('has-files');
+                fileList.innerHTML = this.selectedFiles.map((file, index) => `
+                    <div class="file-item">
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${this.formatFileSize(file.size)}</div>
+                        </div>
+                        <button class="file-remove" onclick="window.popup.removeFile(${index})">&times;</button>
+                    </div>
+                `).join('');
+            }
+
+            removeFile(index) {
+                this.selectedFiles.splice(index, 1);
+                this.updateFileList();
+            }
+
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            handleSubmit() {
+                const remarks = document.getElementById('remarks-field').value;
+
+                alert(`Form submitted!\nFiles: ${this.selectedFiles.length}\nRemarks: ${remarks || 'None'}`);
+                this.close();
+            }
+        }
+
+        // Initialize popup
+        document.addEventListener('DOMContentLoaded', () => {
+            window.popup = new ReusablePopup();
+        });
+
+        // Fallback initialization
+        if (document.readyState !== 'loading') {
+            window.popup = new ReusablePopup();
+        }
+    </script>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

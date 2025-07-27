@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FM Dashboard</title>
+    <link rel="stylesheet" href="../../styles/pages/FMdashboardStyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="user-profile">
+      <div class="user-info">
+        <div class="user-avatar"></div>
+      </div>
+      <div class="dropdown-icon"></div>
+    </div>
+
+    <div class="main-panel">
+      <div class="header">
+        <div class="header-title">FM Dashboard - ETD</div>
+      </div>
+ <button class="new-form-button">
+                <div class="form-icon-1"></div>
+                <div class="form-icon-2"></div>
+                <span>New Form</span>
+                <div class="plus-icon"></div>
+            </button>
+      <div class="controls-section">
+        <div class="filter-controls">
+          <button class="control-button">
+            <span class="control-button-text">Filters</span>
+            <div class="control-icon"></div>
+          </button>
+          <button class="control-button">
+            <span class="control-button-text">Sort</span>
+            <div class="control-icon"></div>
+          </button>
+        </div>
+        
+
+        <div class="search-box">
+          <div class="search-icon"></div>
+          <input class="search-text" placeholder="Search" style="outline: none; border: none;">
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table-wrapper">
+          <!-- Header Row -->
+          <div class="table-row header">
+            <div class="column-header">Tracking ID</div>
+            <div class="column-header">Applicant Name</div>
+            <div class="column-header">CNIC</div>
+            <div class="column-header">Passport No.</div>
+            <div class="column-header">Verification Status</div>
+            <div class="column-header">Actions</div>
+          </div>
+
+          <!-- Row 1 -->
+          <div class="table-row">
+            <div class="table-cell">100001E</div>
+            <div class="table-cell">Leslie Alexander</div>
+            <div class="table-cell table-cell-small">61101-3082523-9</div>
+            <div class="table-cell table-cell-small">P4366918</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="table-row">
+            <div class="table-cell">100002E</div>
+            <div class="table-cell">Brooklyn Simmons</div>
+            <div class="table-cell table-cell-small">61101-3082524-9</div>
+            <div class="table-cell table-cell-small">P4366919</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="table-row">
+            <div class="table-cell">100003E</div>
+            <div class="table-cell">John Doe</div>
+            <div class="table-cell table-cell-small">61101-3082525-9</div>
+            <div class="table-cell table-cell-small">P4366920</div>
+            <div class="table-cell"><div class="tag tag-green">Completed</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="table-row">
+            <div class="table-cell">100004E</div>
+            <div class="table-cell">Jane Smith</div>
+            <div class="table-cell table-cell-small">61101-3082526-9</div>
+            <div class="table-cell table-cell-small">P4366921</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="table-row">
+            <div class="table-cell">100005E</div>
+            <div class="table-cell">Michael Johnson</div>
+            <div class="table-cell table-cell-small">61101-3082527-9</div>
+            <div class="table-cell table-cell-small">P4366922</div>
+            <div class="table-cell"><div class="tag tag-green">Completed</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 6 -->
+          <div class="table-row">
+            <div class="table-cell">100006E</div>
+            <div class="table-cell">Sarah Wilson</div>
+            <div class="table-cell table-cell-small">61101-3082528-9</div>
+            <div class="table-cell table-cell-small">P4366923</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 7 -->
+          <div class="table-row">
+            <div class="table-cell">100007E</div>
+            <div class="table-cell">Robert Brown</div>
+            <div class="table-cell table-cell-small">61101-3082529-9</div>
+            <div class="table-cell table-cell-small">P4366924</div>
+            <div class="table-cell"><div class="tag tag-green">Completed</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+          <!-- Row 8 -->
+          <div class="table-row">
+            <div class="table-cell">100008E</div>
+            <div class="table-cell">Emily Davis</div>
+            <div class="table-cell table-cell-small">61101-3082530-9</div>
+            <div class="table-cell table-cell-small">P4366925</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Row 9 -->
+          <div class="table-row">
+            <div class="table-cell">100001E</div>
+            <div class="table-cell">Leslie Alexander</div>
+            <div class="table-cell table-cell-small">61101-3082523-9</div>
+            <div class="table-cell table-cell-small">P4366918</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+            <!-- Row 10 -->
+          <div class="table-row">
+            <div class="table-cell">100001E</div>
+            <div class="table-cell">Leslie Alexander</div>
+            <div class="table-cell table-cell-small">61101-3082523-9</div>
+            <div class="table-cell table-cell-small">P4366918</div>
+            <div class="table-cell"><div class="tag tag-red">In progress</div></div>
+            <div class="table-cell"><div class="tag tag-gray">View</div></div>
+          </div>
+
+      <div class="pagination">
+        <button class="pagination-dropdown">
+          <span class="pagination-text">20</span>
+          <div class="control-icon"></div>
+        </button>
+        <div class="pagination-controls">
+          <button class="page-button">
+            <div class="control-icon"></div>
+          </button>
+          <button class="page-button selected">
+            <span class="page-button-text">1</span>
+          </button>
+          <button class="page-button">
+            <span class="page-button-text">2</span>
+          </button>
+          <button class="page-button">
+            <span class="page-button-text">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

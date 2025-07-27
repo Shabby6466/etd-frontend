@@ -1,0 +1,254 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #E5EDFF;
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px;
+  position: relative;
+}
+
+.main-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.header-icon {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  border-radius: 8px;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #19161D;
+}
+
+.controls-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-button,
+.export-button {
+  gap: 8px;
+  padding: 6px 12px;
+  background: #F2F2F2;
+  border-radius: 40px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.control-button:hover,
+.export-button:hover {
+  background: #E0E0E0;
+}
+
+.control-button-text {
+  font-size: 14px;
+  color: #19161D;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 40px;
+  border: 1px solid #EBEBEB;
+  min-width: 200px;
+}
+
+.search-icon {
+    content: '';
+  width: 16px;
+  height: 16px;
+  background:url(/public/assets/svgs/Search.svg);
+}
+
+.search-text {
+  color: #53575A;
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.table-container {
+  background: white;
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  display: grid;
+  grid-template-columns: 114px 206px 210px 187px 198px 212px 218px 253px;
+  border-top: 1px solid #EBEBEB;
+}
+
+.column-header,
+.table-cell,
+.table-cell-small,
+.table-cell-tags {
+  padding: 12px;
+  border-bottom: 1px solid #EBEBEB;
+  border-right: 1px solid #EBEBEB;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.column-header {
+  background: #EBF1FC;
+  font-weight: 500;
+}
+
+.table-cell-small {
+  font-size: 12px;
+}
+
+.tag {
+  padding: 4px 8px;
+  border-radius: 24px;
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+.tag-red {
+  background: #FFBEBE;
+  color: #5B0000;
+}
+
+.tag-green {
+  background: #D2FFD4;
+  color: #006B1A;
+}
+
+.tag-gray {
+  background: #F0F0F0;
+  color: #19161D;
+  cursor: pointer;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  margin-top: 16px;
+  border-radius: 16px;
+}
+
+.pagination-dropdown {
+  background: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.pagination-text {
+  font-size: 12px;
+  color: #19161D;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.page-button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.page-button.selected {
+  background: #EBF1FC;
+}
+
+.page-button-text {
+  font-size: 14px;
+  color: #19161D;
+  line-height: 24px;
+  text-align: center;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: url(/public/assets/dgip-pfp.png);
+}
+
+/* .user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #19161D;
+} */
+
+.dropdown-icon {
+    content: '';
+  width: 16px;
+  height: 16px;
+  background: url(/public/assets/svgs/Chevron--down.svg);
+    cursor: pointer;
+    transition: transform 0.2s;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  /* .table-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  } */
+/* 
+  .controls-section {
+    flex-direction: column;
+    align-items: flex-start;
+  } */
+}

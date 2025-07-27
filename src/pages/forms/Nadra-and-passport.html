@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport and Nadra Details</title>
+    <link rel="stylesheet" href="../../styles/pages/NadraPassStyles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <button class="back-button" style="
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            background: #525EB1;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        ">← Go Back</button>
+        
+        <div class="background-overlay">
+            <img class="background-image" src="../../../public/assets/Gov.png" alt="Background Image" />
+        </div>
+        <img class="header-image" src="../../../public/assets/login-logo.png" alt="Header Image" />
+
+        <!-- Passport Details -->
+        <div class="card passport-card">
+            <div class="card-header">
+                <div class="card-title">Passport Details</div>
+                <div class="divider"></div>
+                <img class="profile-image" src="../../../public/assets/Rectangle 1.png" alt="Profile Image" />
+            </div>
+            <div class="card-content">
+                <div class="field">
+                    <div class="label">First name</div>
+                    <div class="value">Faraz Asad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Last Name</div>
+                    <div class="value">Asad Javed</div>
+                </div>
+                <div class="field">
+                    <div class="label">Fathers Name</div>
+                    <div class="value">Asad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Mothers Name</div>
+                    <div class="value">Mariam</div>
+                </div>
+                <div class="field">
+                    <div class="label">Gender</div>
+                    <div class="value">Male</div>
+                </div>
+                <div class="field">
+                    <div class="label">Pakistan City</div>
+                    <div class="value">Islamabad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Date of Birth</div>
+                    <div class="value">14-08-2005</div>
+                </div>
+                <div class="field">
+                    <div class="label">Birth Country</div>
+                    <div class="value">Pakistan</div>
+                </div>
+                <div class="field">
+                    <div class="label">Birth City</div>
+                    <div class="value">Islamabad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Profession</div>
+                    <div class="value">Student</div>
+                </div>
+                <div class="field">
+                    <div class="label">Pakistan Address</div>
+                    <div class="value">House 123 Street 123</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nadra Details -->
+        <div class="card nadra-card">
+            <div class="card-header">
+                <div class="card-title">Nadra Details</div>
+                <div class="divider"></div>
+                <img class="profile-image" src="../../../public/assets/Rectangle 1.png" alt="Profile Image" />
+            </div>
+            <div class="card-content">
+                <div class="field">
+                    <div class="label">First name</div>
+                    <div class="value">Faraz Asad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Last Name</div>
+                    <div class="value">Asad Javed</div>
+                </div>
+                <div class="field">
+                    <div class="label">Fathers Name</div>
+                    <div class="value">Asad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Mothers Name</div>
+                    <div class="value">Mariam</div>
+                </div>
+                <div class="field">
+                    <div class="label">Gender</div>
+                    <div class="value">Male</div>
+                </div>
+                <div class="field">
+                    <div class="label">Pakistan City</div>
+                    <div class="value">Islamabad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Date of Birth</div>
+                    <div class="value">14-08-2005</div>
+                </div>
+                <div class="field">
+                    <div class="label">Birth Country</div>
+                    <div class="value">Pakistan</div>
+                </div>
+                <div class="field">
+                    <div class="label">Birth City</div>
+                    <div class="value">Islamabad</div>
+                </div>
+                <div class="field">
+                    <div class="label">Profession</div>
+                    <div class="value">Student</div>
+                </div>
+                <div class="field">
+                    <div class="label">Pakistan Address</div>
+                    <div class="value">House 123 Street 123</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Citizen Number -->
+        <div class="citizen-card">
+            <div class="field">
+                <div class="label">Citizen Number</div>
+                <div class="value">61101-3082523-9</div>
+            </div>
+            <div class="fia-status">
+                <div class="fia-label">FIA BLACKLIST:</div>
+                <div class="fia-value">No</div>
+            </div>
+        </div>
+
+        <!-- Input Particulars -->
+        <div class="card input-card">
+            <div class="card-title">Input Particulars</div>
+            <div class="card-content two-column">
+                <div class="column">
+                    <div class="field">
+                        <label for="height" class="label">Height</label>
+                        <input type="text" id="height" class="input" placeholder="Enter height" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="eyeColor" class="label">Color of Eyes</label>
+                        <input type="text" id="eyeColor" class="input" placeholder="hazel" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="transport" class="label">Transport Mode</label>
+                        <input type="text" id="transport" class="input" placeholder="Airplane" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="requestedBy" class="label">Requested By</label>
+                        <select id="requestedBy" class="input"  >
+                            <option value="poland" selected style="border: none; outline: none;">Government of Poland</option>
+                            <option value="pakistan">Government of Pakistan</option>
+                            <option value="usa">Government of USA</option>
+                            <option value="uk">Government of UK</option>
+                            <option value="germany">Government of Germany</option>
+                        </select>
+
+                    </div>
+                    <div class="field">
+                        <label for="amount" class="label">Amount</label>
+                        <input type="number" id="amount" class="input" placeholder="1000" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="depositDesc" class="label">Security Deposit Description</label>
+                        <input type="text" id="depositDesc" class="input" placeholder="e.g. None" style="border: none; outline: none;">
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="field">
+                        <label for="hairColor" class="label">Color of Hair</label>
+                        <input type="text" id="hairColor" class="input" placeholder="brown" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="departureDate" class="label">Departure Date</label>
+                        <input type="date" id="departureDate" class="input" placeholder="10-12-2025"  style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="investor" class="label">Investor</label>
+                        <input type="text" id="investor" class="input" placeholder="Gov of Pakistan" style="border: none; outline: none;">
+                    </div>
+                    <div class="field">
+                        <label for="reason" class="label" style="border: none; outline: none;" >Reason for Deport</label>
+                        <select id="reason" class="input"  style="border: none; outline: none; ">
+                            <option value="crime" selected>Crime</option>
+                            <option value="visa_expired">Visa Expired</option>
+                            <option value="illegal_entry">Illegal Entry</option>
+                            <option value="document_fraud">Document Fraud</option>
+                            <option value="security_threat">Security Threat</option>
+                            <option value="other">Other</option>
+                        </select>
+
+                    </div>
+                    <div class="field">
+  <label for="currency" class="label">Currency</label>
+  <select id="currency" class="input" style="border: none; outline: none;">
+    <option value="PKR">PKR</option>
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="GBP">GBP</option>
+    <option value="AED">AED</option>
+  </select>
+</div>
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="button secondary" style="cursor: pointer;">Save</button>
+                <button class="button primary" id="generateBtn">Generate Tracking ID</button>
+            </div>
+
+        </div>
+        <img class="side-image" src="../../../public/assets/DGIP-logo.png" alt="Side Image" />
+           <!-- Popup Modal -->
+    <div id="popupOverlay" class="popup-overlay">
+        <div class="popup-content">
+            <button class="close-popup" onclick="closePopup()">&times;</button>
+            
+            <div class="popup-header">
+                <div class="popup-title">Token Generated</div>
+                <div class="popup-tracking">Tracking Id : 0000002R</div>
+            </div>
+
+            <div class="popup-logo"></div>
+            <div class="popup-divider"></div>
+
+            <div class="popup-form">
+                <div class="popup-input-group">
+                    <label class="popup-input-label">Full name</label>
+                    <div class="popup-input">
+                        <div class="popup-input-value">Faraz Asad</div>
+                    </div>
+                </div>
+
+                <div class="popup-input-group">
+                    <label class="popup-input-label">Cnic</label>
+                    <div class="popup-input">
+                        <div class="popup-input-value">61101-3082523-9</div>
+                    </div>
+                </div>
+
+                <div class="popup-input-group">
+                    <label class="popup-input-label">Pakistan Passport Number</label>
+                    <div class="popup-input">
+                        <div class="popup-input-value">P4366918</div>
+                    </div>
+                </div>
+
+                <div class="popup-fee-section">
+                    <div class="popup-fee-amount">
+                        <label class="popup-input-label">Fee Amount</label>
+                        <div class="popup-input">
+                            <div class="popup-input-value">15</div>
+                        </div>
+                    </div>
+                    <div class="popup-currency">
+                        <label class="popup-input-label">Currency</label>
+                        <div class="popup-input">
+                            <div class="popup-input-value">US</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="popup-button">
+                    Send For Verification
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const generateBtn = document.getElementById("generateBtn");
+            const popupOverlay = document.getElementById("popupOverlay");
+
+            generateBtn.addEventListener("click", function () {
+                popupOverlay.style.display = "flex";
+            });
+
+            // Close popup when clicking outside
+            popupOverlay.addEventListener("click", function(e) {
+                if (e.target === popupOverlay) {
+                    closePopup();
+                }
+            });
+        });
+
+        function closePopup() {
+            document.getElementById("popupOverlay").style.display = "none";
+        }
+    </script>
+</body>
+<script src="../../scripts/router.js"></script>
+</html>

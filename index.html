@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETD System - Emergency Travel Document Management</title>
+    <meta name="description" content="Emergency Travel Document Management System for government agencies">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #E5EDFF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .loading-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-width: 300px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: url('public/assets/dgip-pfp.png') no-repeat center center;
+            background-size: contain;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+        }
+        
+        .loading-text {
+            color: #525EB1;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .loading-subtext {
+            color: #53575A;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #E5EDFF;
+            border-top: 3px solid #525EB1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="logo"></div>
+        <div class="loading-text">Emergency Travel Document System</div>
+        <div class="loading-subtext">Initializing secure session...</div>
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <script>
+        // Environment configuration
+        const config = {
+            baseUrl: window.location.origin,
+            apiUrl: '/api',
+            authUrl: '/src/pages/auth/login.html',
+            assetsUrl: '/public/assets'
+        };
+        
+        // Initialize application
+        function initializeApp() {
+            // Clear any existing session data for fresh start
+            localStorage.removeItem('etd_user');
+            
+            // Add loading delay for better UX
+            setTimeout(() => {
+                window.location.href = config.authUrl;
+            }, 1500);
+        }
+        
+        // Start initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+    </script>
+</body>
+</html> 
