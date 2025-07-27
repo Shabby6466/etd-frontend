@@ -422,4 +422,4 @@ This project is licensed for government use only. Unauthorized distribution or m
 
 **Version:** 1.0.0  
 **Last Updated:** January 2025  
-**Maintained by:** Government Agency Development Team 
+**Maintained by:** TeraRare
