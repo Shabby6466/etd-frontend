@@ -27,6 +27,15 @@
             <div class="input-wrapper">
               <input class="input-box" type="password" id="password" placeholder="Enter your password" />
             </div>
+            <div class="input-wrapper">
+              <select class="input-box" id="userRole" style="padding: 12px;">
+                <option value="">Select your role</option>
+                <option value="fm">Foreign Ministry</option>
+                <option value="hq">Headquarters</option>
+                <option value="agency">Processing Agency</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
           </div>
 
 
@@ -52,8 +61,9 @@
     <img class="gov-bg" src="../../../public/assets/Gov.png" />
     <img class="dgip-logo" src="../../../public/assets/DGIP-logo.png" />
   </div>
+  <script src="../../scripts/role-manager.js"></script>
   <script src="../../scripts/router.js"></script>
-  <script type="module" src="../../scripts/login.js"></script>
+  <script type="module" src="../../scripts/login-refactored.js"></script>
 </body>
 
 </html>

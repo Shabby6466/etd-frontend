@@ -40,10 +40,18 @@ class BackendApiService {
                 throw new Error(data.message || 'Login failed');
             }
 
+            // Enhanced response to include user role and permissions
             return {
                 success: true,
                 data: data,
-                token: data.token
+                token: data.token,
+                user: {
+                    username: username.toLowerCase(),
+                    role: data.role || locationId,
+                    locationId: locationId,
+                    permissions: data.permissions || [],
+                    dashboardUrl: this.getDashboardForRole(data.role || locationId)
+                }
             };
         } catch (error) {
             console.error('Login API error:', error);
@@ -52,6 +60,38 @@ class BackendApiService {
                 error: error.message
             };
         }
+    }
+
+    // Get appropriate dashboard URL based on user role
+    getDashboardForRole(role) {
+        const roleMapping = {
+            'fm': '/src/pages/dashboards/FMdashboard.html',
+            'foreign_ministry': '/src/pages/dashboards/FMdashboard.html',
+            'hq': '/src/pages/dashboards/HQdashboard.html',
+            'headquarters': '/src/pages/dashboards/HQdashboard.html',
+            'agency': '/src/pages/dashboards/AgencyDashboard.html',
+            'processing_agency': '/src/pages/dashboards/AgencyDashboard.html',
+            'admin': '/src/pages/dashboards/HQdashboard.html',
+            'super_admin': '/src/pages/dashboards/HQdashboard.html'
+        };
+
+        return roleMapping[role.toLowerCase()] || '/src/pages/dashboards/FMdashboard.html';
+    }
+
+    // Get role-based permissions
+    getRolePermissions(role) {
+        const permissionMapping = {
+            'fm': ['view_dashboard', 'create_form', 'view_etd_data', 'print_token'],
+            'foreign_ministry': ['view_dashboard', 'create_form', 'view_etd_data', 'print_token'],
+            'hq': ['view_dashboard', 'view_details', 'send_verification', 'approve_applications'],
+            'headquarters': ['view_dashboard', 'view_details', 'send_verification', 'approve_applications'],
+            'agency': ['view_dashboard', 'verify_documents', 'upload_files', 'process_applications'],
+            'processing_agency': ['view_dashboard', 'verify_documents', 'upload_files', 'process_applications'],
+            'admin': ['view_dashboard', 'manage_users', 'view_all_applications', 'system_config'],
+            'super_admin': ['*'] // All permissions
+        };
+
+        return permissionMapping[role.toLowerCase()] || ['view_dashboard'];
     }
 
     async logout() {
