@@ -1,0 +1,353 @@
+# API Integration Guide for NADRA and Passport Services
+
+## Overview
+This document provides detailed instructions for integrating third-party NADRA and Passport verification APIs into the ETD-DGIP application management system.
+
+## Current Implementation Status
+The system currently includes:
+- Placeholder simulation methods for NADRA and Passport API calls
+- Database entities to store API responses (NadraResponse, PassportResponse)
+- Automatic API triggering when applications are submitted (non-draft status)
+- Error handling and response storage mechanisms
+
+## Required API Integrations
+
+### 1. NADRA (National Database and Registration Authority) API
+
+**Purpose**: Verify citizen information and retrieve official records
+
+**Expected Request Format:**
+```json
+{
+  "citizen_id": "384040000000",
+  "verification_type": "basic_info",
+  "requester_id": "ministry_interior"
+}
+```
+
+**Expected Response Format:**
+```json
+{
+  "status": "SUCCESS",
+  "citizen_id": "384040000000",
+  "data": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "father_name": "Robert Doe",
+    "mother_name": "Jane Doe",
+    "pakistan_city": "Karachi",
+    "date_of_birth": "1990-01-01",
+    "birth_country": "Pakistan",
+    "birth_city": "Lahore",
+    "profession": "Software Engineer",
+    "pakistan_address": "123 Main Street, Karachi",
+    "verification_status": "VERIFIED",
+    "last_updated": "2023-11-29T08:12:24.980Z"
+  },
+  "response_id": "NADRA_REQ_20231129_001",
+  "timestamp": "2023-11-29T08:12:24.980Z"
+}
+```
+
+**Error Response Format:**
+```json
+{
+  "status": "ERROR",
+  "error_code": "CITIZEN_NOT_FOUND",
+  "error_message": "Citizen ID not found in NADRA database",
+  "citizen_id": "384040000000",
+  "timestamp": "2023-11-29T08:12:24.980Z"
+}
+```
+
+### 2. Passport API
+
+**Purpose**: Verify passport information and travel document authenticity
+
+**Expected Request Format:**
+```json
+{
+  "citizen_id": "384040000000",
+  "passport_number": "AA1234567",
+  "verification_type": "document_check",
+  "requester_id": "ministry_interior"
+}
+```
+
+**Expected Response Format:**
+```json
+{
+  "status": "SUCCESS",
+  "citizen_id": "384040000000",
+  "passport_number": "AA1234567",
+  "data": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "father_name": "Robert Doe",
+    "mother_name": "Jane Doe",
+    "pakistan_city": "Karachi",
+    "date_of_birth": "1990-01-01",
+    "birth_country": "Pakistan",
+    "birth_city": "Lahore",
+    "profession": "Software Engineer",
+    "pakistan_address": "123 Main Street, Karachi",
+    "passport_status": "ACTIVE",
+    "issue_date": "2020-01-15",
+    "expiry_date": "2030-01-15",
+    "issuing_authority": "Passport Office Karachi"
+  },
+  "response_id": "PASSPORT_REQ_20231129_001",
+  "timestamp": "2023-11-29T08:12:24.980Z"
+}
+```
+
+## Implementation Instructions
+
+### File Locations to Update:
+
+1. **Application Service** (`src/modules/application/application.service.ts`)
+   - Replace `simulateNadraApiCall()` method (lines 164-179)
+   - Replace `simulatePassportApiCall()` method (lines 181-196)
+
+2. **Environment Variables** (`.env` file)
+   Add the following configuration:
+   ```
+   NADRA_API_URL=https://api.nadra.gov.pk/v1/verify
+   NADRA_API_KEY=your_nadra_api_key_here
+   NADRA_REQUESTER_ID=ministry_interior
+   
+   PASSPORT_API_URL=https://api.passport.gov.pk/v1/verify
+   PASSPORT_API_KEY=your_passport_api_key_here
+   PASSPORT_REQUESTER_ID=ministry_interior
+   
+   API_TIMEOUT=30000
+   API_RETRY_ATTEMPTS=3
+   ```
+
+### Code Implementation Examples:
+
+#### NADRA API Integration:
+```typescript
+private async callNadraApi(citizenId: string): Promise<Partial<NadraResponse>> {
+  const apiUrl = process.env.NADRA_API_URL;
+  const apiKey = process.env.NADRA_API_KEY;
+  
+  const requestPayload = {
+    citizen_id: citizenId,
+    verification_type: 'basic_info',
+    requester_id: process.env.NADRA_REQUESTER_ID
+  };
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'X-API-Version': '1.0'
+      },
+      body: JSON.stringify(requestPayload),
+      signal: AbortSignal.timeout(parseInt(process.env.API_TIMEOUT || '30000'))
+    });
+
+    if (!response.ok) {
+      throw new Error(`NADRA API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.status === 'SUCCESS') {
+      return {
+        first_name: data.data.first_name,
+        last_name: data.data.last_name,
+        father_name: data.data.father_name,
+        mother_name: data.data.mother_name,
+        pakistan_city: data.data.pakistan_city,
+        date_of_birth: new Date(data.data.date_of_birth),
+        birth_country: data.data.birth_country,
+        birth_city: data.data.birth_city,
+        profession: data.data.profession,
+        pakistan_address: data.data.pakistan_address,
+        response_status: data.status,
+        api_response_date: new Date(),
+        raw_response: data
+      };
+    } else {
+      throw new Error(`NADRA verification failed: ${data.error_message}`);
+    }
+  } catch (error) {
+    console.error('NADRA API call failed:', error);
+    
+    // Return error response format
+    return {
+      first_name: '',
+      last_name: '',
+      father_name: '',
+      mother_name: '',
+      pakistan_city: '',
+      date_of_birth: new Date(),
+      birth_country: '',
+      birth_city: '',
+      profession: '',
+      pakistan_address: '',
+      response_status: 'ERROR',
+      api_response_date: new Date(),
+      raw_response: { error: error.message }
+    };
+  }
+}
+```
+
+#### Passport API Integration:
+```typescript
+private async callPassportApi(citizenId: string): Promise<Partial<PassportResponse>> {
+  const apiUrl = process.env.PASSPORT_API_URL;
+  const apiKey = process.env.PASSPORT_API_KEY;
+  
+  const requestPayload = {
+    citizen_id: citizenId,
+    verification_type: 'document_check',
+    requester_id: process.env.PASSPORT_REQUESTER_ID
+  };
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'X-API-Version': '1.0'
+      },
+      body: JSON.stringify(requestPayload),
+      signal: AbortSignal.timeout(parseInt(process.env.API_TIMEOUT || '30000'))
+    });
+
+    if (!response.ok) {
+      throw new Error(`Passport API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    if (data.status === 'SUCCESS') {
+      return {
+        first_name: data.data.first_name,
+        last_name: data.data.last_name,
+        father_name: data.data.father_name,
+        mother_name: data.data.mother_name,
+        pakistan_city: data.data.pakistan_city,
+        date_of_birth: new Date(data.data.date_of_birth),
+        birth_country: data.data.birth_country,
+        birth_city: data.data.birth_city,
+        profession: data.data.profession,
+        pakistan_address: data.data.pakistan_address,
+        response_status: data.status,
+        api_response_date: new Date(),
+        raw_response: data
+      };
+    } else {
+      throw new Error(`Passport verification failed: ${data.error_message}`);
+    }
+  } catch (error) {
+    console.error('Passport API call failed:', error);
+    
+    // Return error response format
+    return {
+      first_name: '',
+      last_name: '',
+      father_name: '',
+      mother_name: '',
+      pakistan_city: '',
+      date_of_birth: new Date(),
+      birth_country: '',
+      birth_city: '',
+      profession: '',
+      pakistan_address: '',
+      response_status: 'ERROR',
+      api_response_date: new Date(),
+      raw_response: { error: error.message }
+    };
+  }
+}
+```
+
+### Update fetchThirdPartyData method:
+```typescript
+private async fetchThirdPartyData(applicationId: string, citizenId: string) {
+  try {
+    // Call both APIs concurrently for better performance
+    const [nadraData, passportData] = await Promise.all([
+      this.callNadraApi(citizenId),
+      this.callPassportApi(citizenId)
+    ]);
+
+    const nadraResponse = this.nadraResponseRepository.create(nadraData);
+    const savedNadraResponse = await this.nadraResponseRepository.save(nadraResponse);
+
+    const passportResponse = this.passportResponseRepository.create(passportData);
+    const savedPassportResponse = await this.passportResponseRepository.save(passportResponse);
+
+    await this.applicationRepository.update(applicationId, {
+      nadraResponse: savedNadraResponse,
+      passportResponse: savedPassportResponse
+    });
+
+  } catch (error) {
+    console.error('Error fetching third-party data:', error);
+    // Consider implementing retry logic or notification system for failed API calls
+  }
+}
+```
+
+## Security Considerations
+
+1. **API Key Management**: Store API keys securely using environment variables
+2. **Request Validation**: Validate all requests before sending to external APIs
+3. **Rate Limiting**: Implement rate limiting to prevent API quota exhaustion
+4. **Audit Logging**: Log all API requests and responses for audit trails
+5. **Data Encryption**: Ensure sensitive data is encrypted in transit and at rest
+
+## Error Handling
+
+1. **Network Timeouts**: Configure appropriate timeout values
+2. **Retry Logic**: Implement exponential backoff for failed requests
+3. **Fallback Mechanisms**: Define fallback behavior when APIs are unavailable
+4. **User Notifications**: Inform users about verification status and delays
+
+## Testing Instructions
+
+1. **Unit Tests**: Create tests for API integration methods
+2. **Integration Tests**: Test with actual API endpoints in staging environment
+3. **Error Scenarios**: Test error handling for various failure cases
+4. **Performance Tests**: Verify API response times meet requirements
+
+## Monitoring and Logging
+
+1. **API Response Times**: Monitor API performance metrics
+2. **Error Rates**: Track API failure rates and error types
+3. **Data Quality**: Validate API response data quality
+4. **Usage Analytics**: Track API usage patterns and costs
+
+## Deployment Checklist
+
+- [ ] API credentials configured in production environment
+- [ ] API endpoints verified and accessible
+- [ ] Rate limiting configured appropriately
+- [ ] Monitoring and alerting set up
+- [ ] Backup/fallback mechanisms tested
+- [ ] Documentation updated with actual API specifications
+- [ ] Security audit completed
+- [ ] Performance testing passed
+
+## Contact Information
+
+For API credentials and technical support:
+- NADRA API Support: [contact details]
+- Passport API Support: [contact details]
+- System Administrator: [contact details]
+
+## Notes
+
+- Replace simulation methods only after obtaining actual API credentials
+- Test thoroughly in staging environment before production deployment
+- Keep API documentation updated as specifications change
+- Maintain backward compatibility for existing applications during migration

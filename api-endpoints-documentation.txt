@@ -1,0 +1,475 @@
+# ETD-DGIP API Endpoints Documentation
+
+## Base URL
+```
+http://localhost:3000/api
+```
+
+## Authentication
+All endpoints except `/auth/login` require JWT Bearer token authentication.
+```
+Authorization: Bearer <jwt_token>
+```
+
+---
+
+## Authentication Endpoints
+
+### 1. User Login
+**POST** `/auth/login`
+- **Description**: Authenticate user and get access token
+- **Access**: Public
+- **Request Body**:
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+- **Response**:
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "fullName": "John Doe",
+    "role": "MISSION_OPERATOR",
+    "state": "Punjab",
+    "status": "ACTIVE"
+  }
+}
+```
+
+### 2. Create User (Admin Only)
+**POST** `/auth/admin/create-user`
+- **Description**: Create new user account
+- **Access**: Admin only
+- **Headers**: `Authorization: Bearer <admin_token>`
+- **Request Body**:
+```json
+{
+  "email": "newuser@example.com",
+  "fullName": "Jane Smith",
+  "password": "securepassword",
+  "role": "MISSION_OPERATOR",
+  "state": "Sindh",
+  "status": "ACTIVE"
+}
+```
+- **Response**:
+```json
+{
+  "id": "uuid",
+  "email": "newuser@example.com",
+  "fullName": "Jane Smith",
+  "role": "MISSION_OPERATOR",
+  "state": "Sindh",
+  "status": "ACTIVE",
+  "createdAt": "2023-11-29T08:12:24.980Z"
+}
+```
+
+---
+
+## User Management Endpoints
+
+### 3. Get All Users
+**GET** `/users`
+- **Description**: Retrieve all users in the system
+- **Access**: Admin only
+- **Headers**: `Authorization: Bearer <admin_token>`
+- **Response**:
+```json
+[
+  {
+    "id": "uuid",
+    "email": "user@example.com",
+    "fullName": "John Doe",
+    "role": "MISSION_OPERATOR",
+    "state": "Punjab",
+    "status": "ACTIVE",
+    "createdAt": "2023-11-29T08:12:24.980Z",
+    "lastLoginAt": "2023-11-30T10:30:00.000Z"
+  }
+]
+```
+
+### 4. Get Current User Profile
+**GET** `/users/profile`
+- **Description**: Get current logged-in user's profile
+- **Access**: All authenticated users
+- **Headers**: `Authorization: Bearer <token>`
+- **Response**:
+```json
+{
+  "id": "uuid",
+  "email": "user@example.com",
+  "fullName": "John Doe",
+  "role": "MISSION_OPERATOR",
+  "state": "Punjab",
+  "status": "ACTIVE",
+  "createdAt": "2023-11-29T08:12:24.980Z",
+  "lastLoginAt": "2023-11-30T10:30:00.000Z"
+}
+```
+
+---
+
+## Application Management Endpoints
+
+### 5. Create Application
+**POST** `/applications`
+- **Description**: Create a new application
+- **Access**: Mission Operators only
+- **Headers**: `Authorization: Bearer <mission_operator_token>`
+- **Request Body**:
+```json
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "father_name": "Robert",
+  "mother_name": "Jane",
+  "citizen_id": "384040000000",
+  "pakistan_city": "Karachi",
+  "date_of_birth": "1990-01-01",
+  "birth_country": "Pakistan",
+  "birth_city": "Lahore",
+  "profession": "Software Engineer",
+  "pakistan_address": "123 Main St, Karachi",
+  "height": 5.9,
+  "color_of_hair": "Black",
+  "color_of_eyes": "Brown",
+  "departure_date": "2024-12-01",
+  "transport_mode": "Air",
+  "investor": false,
+  "requested_by": "Ministry of Interior",
+  "reason_for_deport": "Business visa",
+  "amount": 50000,
+  "currency": "USD",
+  "is_fia_blacklist": false,
+  "status": "DRAFT"
+}
+```
+- **Response**:
+```json
+{
+  "id": "uuid",
+  "first_name": "John",
+  "last_name": "Doe",
+  "citizen_id": "384040000000",
+  "status": "DRAFT",
+  "created_by_id": "uuid",
+  "createdAt": "2023-11-29T08:12:24.980Z",
+  // ... other fields
+}
+```
+
+### 6. Get All Applications
+**GET** `/applications`
+- **Description**: Get applications based on user role
+- **Access**: All authenticated users (filtered by role)
+- **Headers**: `Authorization: Bearer <token>`
+- **Query Parameters**:
+  - `page` (optional): Page number for pagination
+  - `limit` (optional): Items per page
+- **Response**:
+```json
+[
+  {
+    "id": "uuid",
+    "first_name": "John",
+    "last_name": "Doe",
+    "citizen_id": "384040000000",
+    "status": "SUBMITTED",
+    "createdBy": {
+      "id": "uuid",
+      "fullName": "Mission Operator Name",
+      "email": "operator@example.com"
+    },
+    "reviewedBy": null,
+    "createdAt": "2023-11-29T08:12:24.980Z",
+    "reviewed_at": null,
+    // ... other fields including nadraResponse and passportResponse
+  }
+]
+```
+
+### 7. Get Application by ID
+**GET** `/applications/:id`
+- **Description**: Get specific application by ID
+- **Access**: Based on user role and ownership
+- **Headers**: `Authorization: Bearer <token>`
+- **Path Parameters**: 
+  - `id`: Application UUID
+- **Response**:
+```json
+{
+  "id": "uuid",
+  "first_name": "John",
+  "last_name": "Doe",
+  "citizen_id": "384040000000",
+  "status": "APPROVED",
+  "createdBy": {
+    "id": "uuid",
+    "fullName": "Mission Operator Name",
+    "email": "operator@example.com"
+  },
+  "reviewedBy": {
+    "id": "uuid",
+    "fullName": "Agency Officer Name",
+    "email": "agency@example.com"
+  },
+  "nadraResponse": {
+    "id": "uuid",
+    "response_status": "SUCCESS",
+    "api_response_date": "2023-11-29T08:15:00.000Z",
+    // ... NADRA data
+  },
+  "passportResponse": {
+    "id": "uuid",
+    "response_status": "SUCCESS",
+    "api_response_date": "2023-11-29T08:15:00.000Z",
+    // ... Passport data
+  },
+  // ... all other application fields
+}
+```
+
+### 8. Update Application
+**PUT** `/applications/:id`
+- **Description**: Update existing application
+- **Access**: Mission Operators (own applications), Agency, Ministry
+- **Headers**: `Authorization: Bearer <token>`
+- **Path Parameters**: 
+  - `id`: Application UUID
+- **Request Body**: Same as Create Application (partial updates allowed)
+- **Response**: Updated application object
+
+### 9. Review Application
+**PATCH** `/applications/:id/review`
+- **Description**: Approve or reject an application
+- **Access**: Agency and Ministry only
+- **Headers**: `Authorization: Bearer <agency_or_ministry_token>`
+- **Path Parameters**: 
+  - `id`: Application UUID
+- **Request Body**:
+```json
+{
+  "approved": true
+}
+```
+- **Response**:
+```json
+{
+  "id": "uuid",
+  "status": "APPROVED",
+  "reviewed_by_id": "uuid",
+  "reviewed_at": "2023-11-29T12:30:00.000Z",
+  // ... other application fields
+}
+```
+
+---
+
+## Dashboard Endpoints
+
+### 10. Admin Dashboard Statistics
+**GET** `/dashboard/admin/stats`
+- **Description**: Get comprehensive admin dashboard statistics
+- **Access**: Admin only
+- **Headers**: `Authorization: Bearer <admin_token>`
+- **Response**:
+```json
+{
+  "totalApplications": 1250,
+  "totalUsers": 45,
+  "applicationsByStatus": {
+    "draft": 120,
+    "submitted": 85,
+    "underReview": 45,
+    "approved": 800,
+    "rejected": 150,
+    "completed": 50
+  },
+  "usersByRole": {
+    "missionOperators": 30,
+    "agency": 8,
+    "ministry": 5,
+    "admin": 2
+  },
+  "recentApplications": [
+    {
+      "id": "uuid",
+      "first_name": "John",
+      "last_name": "Doe",
+      "status": "SUBMITTED",
+      "createdBy": {
+        "fullName": "Operator Name"
+      },
+      "createdAt": "2023-11-29T08:12:24.980Z"
+    }
+    // ... up to 10 recent applications
+  ]
+}
+```
+
+### 11. Agency Applications for Review
+**GET** `/dashboard/agency/applications`
+- **Description**: Get applications pending agency review
+- **Access**: Agency only
+- **Headers**: `Authorization: Bearer <agency_token>`
+- **Response**:
+```json
+{
+  "pendingReview": 25,
+  "applications": [
+    {
+      "id": "uuid",
+      "first_name": "John",
+      "last_name": "Doe",
+      "citizen_id": "384040000000",
+      "status": "SUBMITTED",
+      "createdBy": {
+        "fullName": "Mission Operator Name"
+      },
+      "nadraResponse": {
+        "response_status": "SUCCESS"
+      },
+      "passportResponse": {
+        "response_status": "SUCCESS"
+      },
+      "createdAt": "2023-11-29T08:12:24.980Z"
+      // ... other relevant fields
+    }
+  ]
+}
+```
+
+### 12. Ministry Applications for Review
+**GET** `/dashboard/ministry/applications`
+- **Description**: Get applications pending ministry review
+- **Access**: Ministry only
+- **Headers**: `Authorization: Bearer <ministry_token>`
+- **Response**: Same format as Agency Applications
+
+### 13. Mission Operator Dashboard Summary
+**GET** `/dashboard/mission-operator/summary`
+- **Description**: Get mission operator's personal dashboard summary
+- **Access**: Mission Operators only
+- **Headers**: `Authorization: Bearer <mission_operator_token>`
+- **Response**:
+```json
+{
+  "totalApplications": 45,
+  "applicationsByStatus": {
+    "draft": 5,
+    "submitted": 12,
+    "approved": 20,
+    "rejected": 8
+  },
+  "recentApplications": [
+    {
+      "id": "uuid",
+      "first_name": "John",
+      "last_name": "Doe",
+      "status": "APPROVED",
+      "createdAt": "2023-11-29T08:12:24.980Z"
+    }
+    // ... up to 5 recent applications
+  ]
+}
+```
+
+---
+
+## HTTP Status Codes
+
+### Success Codes
+- **200 OK**: Request successful
+- **201 Created**: Resource created successfully
+
+### Client Error Codes
+- **400 Bad Request**: Invalid request data
+- **401 Unauthorized**: Missing or invalid authentication
+- **403 Forbidden**: Insufficient permissions
+- **404 Not Found**: Resource not found
+- **409 Conflict**: Resource conflict (e.g., duplicate citizen_id)
+
+### Server Error Codes
+- **500 Internal Server Error**: Server error
+
+---
+
+## Error Response Format
+
+All error responses follow this format:
+```json
+{
+  "statusCode": 400,
+  "message": "Validation failed",
+  "error": "Bad Request",
+  "details": [
+    "citizen_id must be a 12-digit number string",
+    "first_name should not be empty"
+  ]
+}
+```
+
+---
+
+## Role-Based Access Summary
+
+| Role | Create App | View Own Apps | View All Apps | Review Apps | Manage Users | Admin Dashboard |
+|------|------------|---------------|---------------|-------------|--------------|-----------------|
+| **Mission Operator** | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Agency** | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| **Ministry** | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| **Admin** | ❌ | ❌ | ✅ | ❌ | ✅ | ✅ |
+
+---
+
+## Rate Limiting
+- **Default**: 1000 requests per 5-second window
+- **Authentication endpoints**: 10 requests per minute per IP
+- **File upload endpoints**: 5 requests per minute per user
+
+---
+
+## Pagination
+For endpoints that support pagination:
+- Default page size: 20 items
+- Maximum page size: 100 items
+- Query parameters: `?page=1&limit=20`
+
+Response includes pagination metadata:
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 150,
+    "totalPages": 8,
+    "hasNext": true,
+    "hasPrev": false
+  }
+}
+```
+
+---
+
+## Swagger Documentation
+Interactive API documentation is available at:
+```
+http://localhost:3000/api/docs
+```
+
+---
+
+## Testing Endpoints
+Use the following test credentials (if seeded):
+- **Admin**: `admin@example.com / admin123`
+- **Agency**: `agency@example.com / agency123`
+- **Ministry**: `ministry@example.com / ministry123`
+- **Mission Operator**: `operator@example.com / operator123`
