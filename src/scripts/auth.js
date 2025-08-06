@@ -15,36 +15,70 @@ export async function login(username, password, locationId = 'fm') {
   console.log("Attempting login with:", { username, password, locationId });
 
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, locationId, password }),
-    });
-
-    const data = await response.json();
-    console.log("API response:", data);
-
-    if (!response.ok) {
-      alert(data.message || "Login failed");
-      return;
+    // Try to import backend service dynamically
+    let backendService = null;
+    try {
+      const module = await import('./backend-api-service.js');
+      backendService = module.default;
+    } catch (importError) {
+      console.warn('Backend API service not available, using fallback');
     }
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem('etd_user', username.toLowerCase());
-    localStorage.setItem('etd_user_role', 'fm');
+    let result;
     
-    // Always navigate to FM dashboard
-    if (window.etdRouter) {
-      window.etdRouter.navigateTo('FMdashboard.html');
+    if (backendService) {
+      // Use new backend API service
+      result = await backendService.login(username, password, locationId);
+      
+      if (result.success) {
+        localStorage.setItem("token", result.token);
+        localStorage.setItem('etd_user', username.toLowerCase());
+        localStorage.setItem('etd_user_role', locationId);
+        
+        // Always navigate to FM dashboard
+        if (window.etdRouter) {
+          window.etdRouter.navigateTo('FMdashboard.html');
+        } else {
+          window.location.href = '/src/pages/dashboards/FMdashboard.html';
+        }
+        return result;
+      } else {
+        throw new Error(result.error);
+      }
     } else {
-      // Fallback navigation without router
-      window.location.href = '/src/pages/dashboards/FMdashboard.html';
+      // Fallback to direct API call
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, locationId, password }),
+      });
+
+      const data = await response.json();
+      console.log("API response:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem('etd_user', username.toLowerCase());
+      localStorage.setItem('etd_user_role', locationId);
+      
+      // Always navigate to FM dashboard
+      if (window.etdRouter) {
+        window.etdRouter.navigateTo('FMdashboard.html');
+      } else {
+        window.location.href = '/src/pages/dashboards/FMdashboard.html';
+      }
+      
+      return { success: true, data: data, token: data.token };
     }
   } catch (error) {
     console.error("Login error:", error);
-    alert("An error occurred while logging in.");
+    alert(`Login failed: ${error.message}`);
+    return { success: false, error: error.message };
   }
 }
 
