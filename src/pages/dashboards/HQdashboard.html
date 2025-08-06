@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HQ Dashboard</title>
+  <title>Admin Dashboard</title>
   <link rel="stylesheet" href="../../styles/pages/HQdashBoardstyles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
 </head>
@@ -11,15 +11,14 @@
   <div class="dashboard-container">
     <div class="user-profile">
       <div class="user-info">
-        <img class="user-avatar" src="../../../public/assets/login-logo 2 (1).png" alt="User Avatar" />
-       
+        <div class="user-avatar"></div>
       </div>
       <div class="dropdown-icon"></div>
     </div>
 
     <div class="main-panel">
       <div class="header">
-        <div class="header-title">HQ Dashboard - ETD</div>
+        <div class="header-title">Admin Dashboard - ETD</div>
       </div>
 
       <div class="controls-section">
@@ -32,154 +31,136 @@
             <span class="control-button-text">Sort</span>
             <div class="control-icon"></div>
           </button>
+          <button class="control-button" id="export-btn">
+            <span class="control-button-text">Export</span>
+            <div class="control-icon"></div>
+          </button>
+          <button class="control-button" id="create-user-btn">
+            <span class="control-button-text">+ Create User</span>
+            <div class="control-icon"></div>
+          </button>
         </div>
-<!-- 
-        <button class="export-button">
-          <span class="control-button-text">Export</span>
-          <div class="control-icon"></div>
-        </button> -->
 
         <div class="search-box">
           <div class="search-icon"></div>
-          <input class="search-text" placeholder="Search" style="outline: none; border: none;"></input>
+          <input class="search-text" placeholder="Search applications, users..." style="outline: none; border: none;">
         </div>
       </div>
 
       <div class="table-container">
-        <div class="table-wrapper">
-          <!-- Header Row -->
-          <div class="column-header">Tracking ID</div>
-          <div class="column-header">Applicant Name</div>
-          <div class="column-header">CNIC</div>
-          <div class="column-header">Passport No.</div>
-          <div class="column-header">Verification Requirement</div>
-          <div class="column-header">Agency Verification</div>
-          <div class="column-header">Verification Status</div>
-          <div class="column-header">Actions</div>
+        <div id="dashboard-widgets" style="margin-bottom: 20px;">
+          <!-- Dashboard widgets will be inserted here -->
+        </div>
+        
+        <div id="content-tabs" style="margin-bottom: 20px;">
+          <div class="tab-buttons">
+            <button class="tab-button active" data-tab="applications">Applications</button>
+            <button class="tab-button" data-tab="users">Users</button>
+            <button class="tab-button" data-tab="reports">Reports</button>
+          </div>
+        </div>
 
-          <!-- Row 1 -->
-          <div class="table-cell">100001E</div>
-          <div class="table-cell">Leslie Alexander</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-red">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-red">In Progress</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+        <div class="table-wrapper" id="applications-table">
+        </div>
 
-          <!-- Row 2 -->
-          <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
-           <div class="table-cell">100001E</div>
-          <div class="table-cell">Brooklyn Simmons</div>
-          <div class="table-cell-small">61101-3082523-9</div>
-          <div class="table-cell-small">P4366918</div>
-          <div class="table-cell-tags"><div class="tag tag-red">Yes</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">IB</div><div class="tag tag-green">SB</div></div>
-          <div class="table-cell-tags"><div class="tag tag-green">Approved</div></div>
-          <div class="table-cell-tags"><div class="tag tag-gray">View</div></div>
+        <div class="table-wrapper" id="users-table" style="display: none;">
+        </div>
 
-          <!-- Add more rows as needed -->
+        <div class="table-wrapper" id="reports-table" style="display: none;">
         </div>
       </div>
 
       <div class="pagination">
-        <button class="pagination-dropdown"><span class="pagination-text">20</span><div class="control-icon"></div></button>
+        <button class="pagination-dropdown">
+          <span class="pagination-text">20</span>
+          <div class="control-icon"></div>
+        </button>
         <div class="pagination-controls">
-          <button class="page-button"><div class="control-icon"></div></button>
-          <button class="page-button selected"><span class="page-button-text">1</span></button>
-          <button class="page-button"><span class="page-button-text">2</span></button>
-          <button class="page-button"><span class="page-button-text">3</span></button>
+          <button class="page-button">
+            <div class="control-icon"></div>
+          </button>
+          <button class="page-button selected">
+            <span class="page-button-text">1</span>
+          </button>
+          <button class="page-button">
+            <span class="page-button-text">2</span>
+          </button>
+          <button class="page-button">
+            <span class="page-button-text">3</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- User Creation Modal -->
+  <div id="user-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create New User</h3>
+        <button class="close-button" id="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="user-form">
+          <div class="form-group">
+            <label for="user-email">Email *</label>
+            <input type="email" id="user-email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="user-fullname">Full Name *</label>
+            <input type="text" id="user-fullname" name="fullName" required>
+          </div>
+          <div class="form-group">
+            <label for="user-password">Password *</label>
+            <input type="password" id="user-password" name="password" required>
+          </div>
+          <div class="form-group">
+            <label for="user-role">Role *</label>
+            <select id="user-role" name="role" required>
+              <option value="">Select Role</option>
+              <option value="MISSION_OPERATOR">Mission Operator</option>
+              <option value="AGENCY">Agency</option>
+              <option value="MINISTRY">Ministry</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="user-state">State</label>
+            <input type="text" id="user-state" name="state">
+          </div>
+          <div class="form-group">
+            <label for="user-status">Status *</label>
+            <select id="user-status" name="status" required>
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">Inactive</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" id="cancel-user">Cancel</button>
+        <button type="submit" class="btn-primary" id="create-user">Create User</button>
+      </div>
+    </div>
+  </div>
 </body>
-<script src="../../scripts/router.js"></script>
+
+<!-- API Configuration -->
+<script src="../../../config/api.config.js"></script>
+
+<!-- Core API Services -->
+<script src="../../scripts/backend-api-service.js"></script>
+<script src="../../scripts/auth-service.js"></script>
+<script src="../../scripts/application-service.js"></script>
+<script src="../../scripts/dashboard-service.js"></script>
+
+<!-- Utilities -->
+<script src="../../scripts/utils.js"></script>
+
+<!-- Base Dashboard Handler (must load before admin handler) -->
+<script src="../../scripts/dashboard-handler.js"></script>
+
+<!-- Admin Dashboard Handler -->
+<script src="../../scripts/admin-dashboard-handler.js"></script>
+
 </html>

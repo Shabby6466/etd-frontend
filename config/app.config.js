@@ -46,7 +46,7 @@ const AppConfig = {
                 permissions: ['view_dashboard', 'create_form', 'view_etd_data', 'print_token'],
                 redirectPage: '/src/pages/dashboards/FMdashboard.html'
             },
-            hq: {
+            ministry: {
                 name: 'Headquarters',
                 permissions: ['view_dashboard', 'view_details', 'send_verification'],
                 redirectPage: '/src/pages/dashboards/HQdashboard.html'

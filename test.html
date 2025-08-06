@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETD Frontend API Integration Tests</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .test-button:hover {
+            background: #0056b3;
+        }
+        
+        .test-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .test-results {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .results-header {
+            background: #343a40;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .results-content {
+            padding: 0;
+        }
+        
+        .console-output {
+            background: #2d3748;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            padding: 20px;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 500px;
+            overflow-y: auto;
+            margin: 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-running {
+            background: #ffc107;
+            animation: pulse 1s infinite;
+        }
+        
+        .status-success {
+            background: #28a745;
+        }
+        
+        .status-failed {
+            background: #dc3545;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .test-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-card.total {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .stat-card.passed {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .stat-card.failed {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🧪 ETD Frontend API Integration Tests</h1>
+        <p>Comprehensive testing suite for Emergency Travel Document system frontend API integration</p>
+    </div>
+
+    <div class="test-controls">
+        <button id="runTestsBtn" class="test-button" onclick="runTests()">
+            ▶️ Run All Tests
+        </button>
+        <button id="clearResultsBtn" class="test-button" onclick="clearResults()">
+            🗑️ Clear Results
+        </button>
+        <button id="downloadReportBtn" class="test-button hidden" onclick="downloadReport()">
+            📄 Download Report
+        </button>
+    </div>
+
+    <div class="test-results">
+        <div class="results-header">
+            <span id="statusIndicator" class="status-indicator"></span>
+            <span id="testStatus">Ready to run tests</span>
+        </div>
+        <div class="results-content">
+            <pre id="consoleOutput" class="console-output">ETD Frontend API Integration Test Suite
+=====================================
+
+Click "Run All Tests" to begin testing the API integration.
+
+This will test:
+• API Configuration
+• Backend API Service
+• Authentication Service  
+• Application Service
+• Dashboard Service
+• Utilities
+• Form Handler Integration
+• Dashboard Handler Integration
+
+Ready to start...</pre>
+        </div>
+    </div>
+
+    <div id="testSummary" class="test-summary hidden">
+        <h3>Test Summary</h3>
+        <div class="summary-stats">
+            <div class="stat-card total">
+                <span id="totalTests" class="stat-number">0</span>
+                <span>Total Tests</span>
+            </div>
+            <div class="stat-card passed">
+                <span id="passedTests" class="stat-number">0</span>
+                <span>Passed</span>
+            </div>
+            <div class="stat-card failed">
+                <span id="failedTests" class="stat-number">0</span>
+                <span>Failed</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load all the API integration scripts -->
+    <script src="config/api.config.js"></script>
+    <script src="src/scripts/backend-api-service.js"></script>
+    <script src="src/scripts/auth-service.js"></script>
+    <script src="src/scripts/application-service.js"></script>
+    <script src="src/scripts/dashboard-service.js"></script>
+    <script src="src/scripts/utils.js"></script>
+    <script src="src/scripts/integrated-form-handler.js"></script>
+    <script src="src/scripts/dashboard-handler.js"></script>
+    
+    <!-- Load test suite -->
+    <script src="src/scripts/integration-test.js"></script>
+
+    <script>
+        let currentTestReport = null;
+        let originalConsoleLog = console.log;
+        let testOutput = '';
+
+        // Override console.log to capture output
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            const message = args.join(' ');
+            testOutput += message + '\n';
+            updateConsoleOutput(testOutput);
+        };
+
+        function updateConsoleOutput(content) {
+            const consoleElement = document.getElementById('consoleOutput');
+            consoleElement.textContent = content;
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+
+        async function runTests() {
+            const runBtn = document.getElementById('runTestsBtn');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const testStatus = document.getElementById('testStatus');
+            const summaryDiv = document.getElementById('testSummary');
+            const downloadBtn = document.getElementById('downloadReportBtn');
+
+            // Reset state
+            testOutput = '';
+            runBtn.disabled = true;
+            runBtn.textContent = '⏳ Running Tests...';
+            statusIndicator.className = 'status-indicator status-running';
+            testStatus.textContent = 'Running tests...';
+            summaryDiv.classList.add('hidden');
+            downloadBtn.classList.add('hidden');
+
+            try {
+                // Run the integration tests
+                currentTestReport = await window.runETDIntegrationTests();
+                
+                // Update UI based on results
+                if (currentTestReport.status === 'SUCCESS') {
+                    statusIndicator.className = 'status-indicator status-success';
+                    testStatus.textContent = `✅ All tests passed! (${currentTestReport.summary.successRate} success rate)`;
+                } else {
+                    statusIndicator.className = 'status-indicator status-failed';
+                    testStatus.textContent = `❌ Some tests failed (${currentTestReport.summary.successRate} success rate)`;
+                }
+
+                // Update summary
+                updateTestSummary(currentTestReport.summary);
+                summaryDiv.classList.remove('hidden');
+                downloadBtn.classList.remove('hidden');
+
+            } catch (error) {
+                statusIndicator.className = 'status-indicator status-failed';
+                testStatus.textContent = '❌ Test execution failed';
+                console.log(`\n💥 Test execution failed: ${error.message}`);
+            } finally {
+                runBtn.disabled = false;
+                runBtn.textContent = '▶️ Run All Tests';
+            }
+        }
+
+        function updateTestSummary(summary) {
+            document.getElementById('totalTests').textContent = summary.totalTests;
+            document.getElementById('passedTests').textContent = summary.passedTests;
+            document.getElementById('failedTests').textContent = summary.failedTests;
+        }
+
+        function clearResults() {
+            testOutput = '';
+            updateConsoleOutput('Console cleared. Ready to run tests...');
+            
+            document.getElementById('statusIndicator').className = 'status-indicator';
+            document.getElementById('testStatus').textContent = 'Ready to run tests';
+            document.getElementById('testSummary').classList.add('hidden');
+            document.getElementById('downloadReportBtn').classList.add('hidden');
+            
+            currentTestReport = null;
+        }
+
+        function downloadReport() {
+            if (!currentTestReport) {
+                alert('No test report available. Please run tests first.');
+                return;
+            }
+
+            const reportContent = JSON.stringify(currentTestReport, null, 2);
+            const blob = new Blob([reportContent], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `etd-integration-test-report-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+            console.log('📄 Test report downloaded');
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 ETD Integration Test Page Loaded');
+            console.log('Ready to test all API integrations...\n');
+        });
+    </script>
+</body>
+</html>
