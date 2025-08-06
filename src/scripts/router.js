@@ -62,17 +62,26 @@ class ETDRouter {
         window.location.href = targetPath;
     }
 
-    // Login flow
+    // Login flow with role-based routing
     handleLogin(username, password, locationId = 'fm') {
         // Call the auth login function
         return login(username, password, locationId)
-            .then(() => {
+            .then((result) => {
                 // Store user info
                 this.currentUser = username.toLowerCase();
                 localStorage.setItem('etd_user', this.currentUser);
                 
-                // Always navigate to FM dashboard regardless of location
-                this.navigateTo('FMdashboard.html');
+                // Navigate to appropriate dashboard based on user role
+                if (result && result.success && result.user) {
+                    const dashboardFile = result.user.dashboardUrl.split('/').pop();
+                    this.navigateTo(dashboardFile);
+                } else {
+                    // Fallback: get role from localStorage and navigate accordingly
+                    const userRole = localStorage.getItem('etd_user_role') || locationId;
+                    const dashboardFile = this.getDashboardForRole(userRole);
+                    this.navigateTo(dashboardFile);
+                }
+                
                 return true;
             })
             .catch(error => {
@@ -81,20 +90,64 @@ class ETDRouter {
             });
     }
 
-    // Check authentication
+    // Get dashboard file name based on user role
+    getDashboardForRole(role) {
+        const roleMapping = {
+            'fm': 'FMdashboard.html',
+            'foreign_ministry': 'FMdashboard.html',
+            'hq': 'HQdashboard.html',
+            'headquarters': 'HQdashboard.html',
+            'agency': 'AgencyDashboard.html',
+            'processing_agency': 'AgencyDashboard.html',
+            'admin': 'HQdashboard.html',
+            'super_admin': 'HQdashboard.html'
+        };
+
+        return roleMapping[role.toLowerCase()] || 'FMdashboard.html';
+    }
+
+    // Check authentication with role-based access
     checkAuth() {
         const user = localStorage.getItem('etd_user');
         if (!user && this.currentPage !== 'login.html' && this.currentPage !== 'index.html') {
             this.navigateTo('login.html');
             return false;
         }
+        
         this.currentUser = user;
+        
+        // Check if user is accessing appropriate dashboard for their role
+        if (user) {
+            this.validateDashboardAccess();
+        }
+        
         return true;
     }
 
-    // Logout
+    // Validate if user is accessing the correct dashboard for their role
+    validateDashboardAccess() {
+        const userRole = localStorage.getItem('etd_user_role');
+        const currentPage = this.currentPage;
+        
+        if (!userRole) return; // Skip validation if role not set
+        
+        const expectedDashboard = this.getDashboardForRole(userRole);
+        const dashboardPages = ['FMdashboard.html', 'HQdashboard.html', 'AgencyDashboard.html'];
+        
+        // If user is on a dashboard page but not the right one for their role
+        if (dashboardPages.includes(currentPage) && currentPage !== expectedDashboard) {
+            console.log(`Redirecting ${userRole} user from ${currentPage} to ${expectedDashboard}`);
+            this.navigateTo(expectedDashboard);
+        }
+    }
+
+    // Logout - clear all user data
     logout() {
         localStorage.removeItem('etd_user');
+        localStorage.removeItem('etd_user_role');
+        localStorage.removeItem('etd_user_permissions');
+        localStorage.removeItem('etd_dashboard_url');
+        localStorage.removeItem('token');
         this.navigateTo('login.html');
     }
 
