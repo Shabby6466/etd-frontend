@@ -63,27 +63,22 @@ class ETDRouter {
     }
 
     // Login flow
-    handleLogin(username, password) {
-        // Store user info
-        this.currentUser = username.toLowerCase();
-        localStorage.setItem('etd_user', this.currentUser);
-        
-        // Route based on username
-        switch(this.currentUser) {
-            case 'fm':
+    handleLogin(username, password, locationId = 'fm') {
+        // Call the auth login function
+        return login(username, password, locationId)
+            .then(() => {
+                // Store user info
+                this.currentUser = username.toLowerCase();
+                localStorage.setItem('etd_user', this.currentUser);
+                
+                // Always navigate to FM dashboard regardless of location
                 this.navigateTo('FMdashboard.html');
-                break;
-            case 'hq':
-                this.navigateTo('HQdashboard.html');
-                break;
-            case 'agency':
-                this.navigateTo('AgencyDashboard.html');
-                break;
-            default:
-                alert('Invalid credentials. Please use: fm, hq, or agency');
+                return true;
+            })
+            .catch(error => {
+                console.error('Login failed:', error);
                 return false;
-        }
-        return true;
+            });
     }
 
     // Check authentication
@@ -216,19 +211,19 @@ class ETDRouter {
         const usernameInput = document.querySelector('input[type="text"]');
         const passwordInput = document.querySelector('input[type="password"]');
 
-        if (loginButton) {
-            loginButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                const username = usernameInput ? usernameInput.value : '';
-                const password = passwordInput ? passwordInput.value : '';
+        // if (loginButton) {
+        //     loginButton.addEventListener('click', (e) => {
+        //         e.preventDefault();
+        //         const username = usernameInput ? usernameInput.value : '';
+        //         const password = passwordInput ? passwordInput.value : '';
                 
-                if (username && password) {
-                    this.handleLogin(username, password);
-                } else {
-                    alert('Please enter both username and password');
-                }
-            });
-        }
+        //         if (username && password) {
+        //             this.handleLogin(username, password);
+        //         } else {
+        //             alert('Please enter both username and password');
+        //         }
+        //     });
+        // }
 
         // Handle Enter key press
         if (usernameInput && passwordInput) {
