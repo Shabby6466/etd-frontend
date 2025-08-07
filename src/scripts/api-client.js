@@ -11,9 +11,9 @@ class ApiClient {
     // Configuration
     getConfig() {
         const isDevelopment = window.location.hostname === 'localhost';
-        
+
         return {
-            baseURL: isDevelopment ? 'http://localhost:3837/v1/api' : '/api/v1',
+            baseURL: 'http://localhost:3837/v1/api',
             timeout: 30000,
             retries: 3,
             retryDelay: 1000,
@@ -42,22 +42,22 @@ class ApiClient {
     // Process request through interceptors
     async processRequest(url, options) {
         let processedOptions = { ...options };
-        
+
         for (const interceptor of this.requestInterceptors) {
             processedOptions = await interceptor(url, processedOptions) || processedOptions;
         }
-        
+
         return processedOptions;
     }
 
     // Process response through interceptors
     async processResponse(response, originalUrl, originalOptions) {
         let processedResponse = response;
-        
+
         for (const interceptor of this.responseInterceptors) {
             processedResponse = await interceptor(processedResponse, originalUrl, originalOptions) || processedResponse;
         }
-        
+
         return processedResponse;
     }
 
@@ -90,7 +90,7 @@ class ApiClient {
                 clearTimeout(timeoutId);
 
                 const processedResponse = await this.processResponse(response, url, options);
-                
+
                 // Handle response
                 if (processedResponse.ok) {
                     const data = await processedResponse.json().catch(() => ({}));
@@ -107,17 +107,17 @@ class ApiClient {
 
             } catch (error) {
                 lastError = error;
-                
+
                 console.warn(`API request attempt ${attempt} failed:`, error.message);
-                
+
                 // Don't retry on authentication errors or client errors (4xx)
                 if (error.name === 'AbortError' || (error.message.includes('HTTP 4'))) {
                     break;
                 }
-                
+
                 // Wait before retry (except on last attempt)
                 if (attempt < this.config.retries) {
-                    await new Promise(resolve => 
+                    await new Promise(resolve =>
                         setTimeout(resolve, this.config.retryDelay * attempt)
                     );
                 }
@@ -135,7 +135,7 @@ class ApiClient {
     async get(endpoint, params = {}) {
         const queryString = new URLSearchParams(params).toString();
         const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-        
+
         return this.request(url, { method: 'GET' });
     }
 
@@ -169,7 +169,7 @@ class ApiClient {
         try {
             const url = this.buildUrl(endpoint);
             const token = getToken();
-            
+
             const options = {
                 method: 'POST',
                 body: formData,
@@ -184,14 +184,14 @@ class ApiClient {
             if (onProgress && typeof onProgress === 'function') {
                 return new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
-                    
+
                     xhr.upload.addEventListener('progress', (e) => {
                         if (e.lengthComputable) {
                             const progress = Math.round((e.loaded / e.total) * 100);
                             onProgress(progress);
                         }
                     });
-                    
+
                     xhr.addEventListener('load', () => {
                         try {
                             const response = JSON.parse(xhr.responseText);
@@ -204,11 +204,11 @@ class ApiClient {
                             resolve({ success: false, error: 'Invalid response format' });
                         }
                     });
-                    
+
                     xhr.addEventListener('error', () => {
                         reject(new Error('Upload failed'));
                     });
-                    
+
                     xhr.open('POST', url);
                     if (token) {
                         xhr.setRequestHeader('Authorization', `Bearer ${token}`);
@@ -218,7 +218,7 @@ class ApiClient {
             } else {
                 const response = await fetch(url, options);
                 const data = await response.json().catch(() => ({}));
-                
+
                 return {
                     success: response.ok,
                     data: response.ok ? data : null,
@@ -266,7 +266,8 @@ class AuthApiClient extends ApiClient {
 
     // Authentication methods
     async login(credentials) {
-        return this.post('/auth/login', credentials);
+        console.log(credentials);
+        return this.post('/auth/login', { email: credentials.username, password: credentials.password });
     }
 
     async logout() {
@@ -355,7 +356,7 @@ class AppApiClient extends AuthApiClient {
     async uploadFile(file, metadata = {}, onProgress = null) {
         const formData = new FormData();
         formData.append('file', file);
-        
+
         Object.keys(metadata).forEach(key => {
             formData.append(key, metadata[key]);
         });
@@ -365,11 +366,11 @@ class AppApiClient extends AuthApiClient {
 
     async uploadFiles(files, metadata = {}, onProgress = null) {
         const formData = new FormData();
-        
+
         files.forEach((file, index) => {
             formData.append(`files`, file);
         });
-        
+
         Object.keys(metadata).forEach(key => {
             formData.append(key, metadata[key]);
         });

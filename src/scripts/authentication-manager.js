@@ -129,14 +129,15 @@ class AuthenticationManager {
     // Perform the actual login API call
     async performLogin({ username, password, role }) {
         try {
+            console.log(username,password,role);
             // Import API client dynamically to avoid circular dependencies
             const { authApi } = await import('./api-client.js');
             
             const requestPayload = {
                 username,
                 password,
-                locationId: role,
-                role: role
+                // locationId: role,
+                // role: roleok
             };
 
             const result = await authApi.login(requestPayload);

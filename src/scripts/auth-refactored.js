@@ -20,9 +20,9 @@ async function initAuth() {
 export async function login(username, password, role = 'fm') {
     try {
         await initAuth();
-        
+        console.log(username,password,role)
         const result = await authManager.login({
-            username: username.trim(),
+            email: username.trim(),
             password: password.trim(),
             role: role.toLowerCase()
         });

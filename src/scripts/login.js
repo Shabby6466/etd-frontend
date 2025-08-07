@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle Enter key press on input fields
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
-  const roleSelect = document.getElementById("userRole");
+  roleSelect = document.getElementById("userRole");
 
   if (usernameInput && passwordInput && roleSelect) {
     [usernameInput, passwordInput, roleSelect].forEach(input => {

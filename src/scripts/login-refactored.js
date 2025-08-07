@@ -201,6 +201,7 @@ class LoginHandler {
     // Validate all form fields
     validateForm() {
         const { username, password, role } = this.getCredentials();
+        
         const errors = [];
 
         if (!username) {
