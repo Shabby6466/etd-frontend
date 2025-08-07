@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Detail Page</title>
+  <link rel="stylesheet" href="../../styles/pages/application-view.css" />
+</head>
+<body>
+  <div class="main-container">
+    <div class="background-layer">
+      <img class="left-bg-image" src="../../../public/assets/Gov.png" />
+    </div>
+
+    <img class="top-logo" src="../../../public/assets/login-logo.png" />
+
+    <div class="card">
+      <div class="tracking-id">Tracking ID: <span id="tracking-id">Loading...</span></div>
+
+      <div class="field" style="top: 96px; left: 83px;">
+        <label>Type</label>
+        <input type="text" readonly id="application-type" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 100px; left: 462px;">
+        <label>Nationality</label>
+        <input type="text" readonly id="nationality" value="Pakistani" class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 160px; left: 83px;">
+        <label>Name</label>
+        <input type="text" readonly id="full-name" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 161px; left: 462px;">
+        <label>Fathers Name</label>
+        <input type="text" readonly id="father-name" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 224px; left: 83px;">
+        <label>Mother Name</label>
+        <input type="text" readonly id="mother-name" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 225px; left: 462px;">
+        <label>Date of Birth</label>
+        <input type="text" readonly id="date-of-birth" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 288px; left: 83px;">
+        <label>Birth City</label>
+        <input type="text" readonly id="birth-city" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 289px; left: 462px;">
+        <label>Birth Country</label>
+        <input type="text" readonly id="birth-country" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 353px; left: 84px;">
+        <label>Gender</label>
+        <input type="text" readonly id="gender" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 353px; left: 463px;">
+        <label>Profession</label>
+        <input type="text" readonly id="profession" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 420px; left: 83px;">
+        <label>Pakistan City</label>
+        <input type="text" readonly id="pakistan-city" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 420px; left: 463px;">
+        <label>Pakistan Address</label>
+        <input type="text" readonly id="pakistan-address" value="Loading..." class="readonly-input" />
+      </div>
+
+      <img class="document-image" src="../../../public/assets/DGIP-logo.png" />
+
+      <div class="divider-line"></div>
+
+      <div class="field" style="top: 500px; left: 83px;">
+        <label>Height</label>
+        <input type="text" readonly id="height" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 502px; left: 462px;">
+        <label>Color of Eyes</label>
+        <input type="text" readonly id="color-of-eyes" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 564px; left: 83px;">
+        <label>Color of Hairs</label>
+        <input type="text" readonly id="color-of-hair" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 565px; left: 462px;">
+        <label>Departure Date</label>
+        <input type="text" readonly id="departure-date" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 627px; left: 83px;">
+        <label>Transport Mode</label>
+        <input type="text" readonly id="transport-mode" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 627px; left: 462px;">
+        <label>CNIC</label>
+        <input type="text" readonly id="citizen-id" value="Loading..." class="readonly-input" />
+      </div>
+
+      <!-- ETD Specific Fields -->
+      <div class="field" style="top: 691px; left: 83px;" id="etd-investor-field" style="display: none;">
+        <label>Investor</label>
+        <input type="text" readonly id="investor" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 691px; left: 462px;" id="etd-security-field" style="display: none;">
+        <label>Security Deposit Desc</label>
+        <input type="text" readonly id="security-deposit-desc" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 755px; left: 83px;" id="etd-issue-field" style="display: none;">
+        <label>ETD Issue Date</label>
+        <input type="text" readonly id="etd-issue-date" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 755px; left: 462px;" id="etd-expiry-field" style="display: none;">
+        <label>ETD Expiry Date</label>
+        <input type="text" readonly id="etd-expiry-date" value="Loading..." class="readonly-input" />
+      </div>
+
+      <!-- SB Specific Fields -->
+      <div class="field" style="top: 691px; left: 83px;" id="sb-requested-field" style="display: none;">
+        <label>Requested By</label>
+        <input type="text" readonly id="requested-by" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 691px; left: 462px;" id="sb-reason-field" style="display: none;">
+        <label>Reason for Deport</label>
+        <input type="text" readonly id="reason-for-deport" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 755px; left: 83px;" id="sb-amount-field" style="display: none;">
+        <label>Amount</label>
+        <input type="text" readonly id="amount" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 755px; left: 462px;" id="sb-currency-field" style="display: none;">
+        <label>Currency</label>
+        <input type="text" readonly id="currency" value="Loading..." class="readonly-input" />
+      </div>
+
+      <div class="field" style="top: 819px; left: 83px;" id="sb-blacklist-field" style="display: none;">
+        <label>FIA Blacklist</label>
+        <input type="text" readonly id="is-fia-blacklist" value="Loading..." class="readonly-input" />
+      </div>
+
+      <!-- Status Badge -->
+      <div class="status-badge" id="status-badge" style="position: absolute; top: 29px; right: 48px; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500; color: white; text-transform: uppercase;">
+        Loading...
+      </div>
+
+      <div class="footer">
+        <div class="back-button" onclick="goBack()">
+          <span>Go Back</span>
+        </div>
+        <div class="status-actions" id="status-actions" style="display: none;">
+          <button class="approve-button" id="approve-btn">Approve</button>
+          <button class="reject-button" id="reject-btn">Reject</button>
+        </div>
+      </div>
+    </div>
+
+    <img class="right-bg-image" src="../../../public/assets/DGIP-logo.png" />
+  </div>
+
+  <!-- API Configuration -->
+  <script src="../../../config/api.config.js"></script>
+  
+  <!-- Core API Services -->
+  <script src="../../scripts/backend-api-service.js"></script>
+  <script src="../../scripts/auth-service.js"></script>
+  <script src="../../scripts/application-service.js"></script>
+  
+  <!-- Utilities -->
+  <script src="../../scripts/utils.js"></script>
+  
+  <!-- Application View Handler -->
+  <script src="../../scripts/application-view-handler.js"></script>
+</body>
+</html> 

@@ -1,701 +1,173 @@
-import { authFetch, getToken, isLoggedIn } from './auth.js';
-
 class BackendApiService {
     constructor() {
-        this.loadConfig();
+        this.baseURL = this.getBaseURL();
+        this.token = this.getAuthToken();
     }
 
-    loadConfig() {
-        const config = window.getCurrentConfig ? window.getCurrentConfig() : {
-            apiUrl: '/api/v1',
-            environment: 'development'
+    getBaseURL() {
+        return 'http://localhost:3837/v1/api';
+    }
+
+    getAuthToken() {
+        return localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    }
+
+    setAuthToken(token) {
+        localStorage.setItem('auth_token', token);
+        this.token = token;
+    }
+
+    setUser(user){
+        localStorage.setItem('user', user);
+    }
+
+    removeAuthToken() {
+        localStorage.removeItem('auth_token');
+        sessionStorage.removeItem('auth_token');
+        this.token = null;
+    }
+
+    getHeaders() {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        
+        if (this.token) {
+            headers['Authorization'] = `Bearer ${this.token}`;
+        }
+        
+        return headers;
+    }
+
+    async request(endpoint, options = {}) {
+        const url = `${this.baseURL}${endpoint}`;
+        const config = {
+            headers: this.getHeaders(),
+            ...options,
         };
 
-        // Use localhost for development, otherwise use relative paths
-        this.baseApiUrl = config.environment === 'development' 
-            ? 'http://localhost:3837/v1/api' 
-            : config.apiUrl;
-            
-        this.authUrl = `${this.baseApiUrl}/auth`;
-        this.usersUrl = `${this.baseApiUrl}/users`;
-        this.documentsUrl = `${this.baseApiUrl}/documents`;
-        this.uploadsUrl = `${this.baseApiUrl}/uploads`;
-        this.applicationsUrl = `${this.baseApiUrl}/applications`;
-    }
-
-    // Auth API Methods
-    async login(username, password, locationId = 'fm') {
         try {
-            const response = await fetch(`${this.authUrl}/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password, locationId }),
-            });
-
-            const data = await response.json();
+            const response = await fetch(url, config);
             
             if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || `HTTP Error: ${response.status}`);
             }
 
-            // Enhanced response to include user role and permissions
-            return {
-                success: true,
-                data: data,
-                token: data.token,
-                user: {
-                    username: username.toLowerCase(),
-                    role: data.role || locationId,
-                    locationId: locationId,
-                    permissions: data.permissions || [],
-                    dashboardUrl: this.getDashboardForRole(data.role || locationId)
-                }
-            };
-        } catch (error) {
-            console.error('Login API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Get appropriate dashboard URL based on user role
-    getDashboardForRole(role) {
-        const roleMapping = {
-            'fm': '/src/pages/dashboards/FMdashboard.html',
-            'foreign_ministry': '/src/pages/dashboards/FMdashboard.html',
-            'hq': '/src/pages/dashboards/HQdashboard.html',
-            'headquarters': '/src/pages/dashboards/HQdashboard.html',
-            'agency': '/src/pages/dashboards/AgencyDashboard.html',
-            'processing_agency': '/src/pages/dashboards/AgencyDashboard.html',
-            'admin': '/src/pages/dashboards/HQdashboard.html',
-            'super_admin': '/src/pages/dashboards/HQdashboard.html'
-        };
-
-        return roleMapping[role.toLowerCase()] || '/src/pages/dashboards/FMdashboard.html';
-    }
-
-    // Get role-based permissions
-    getRolePermissions(role) {
-        const permissionMapping = {
-            'fm': ['view_dashboard', 'create_form', 'view_etd_data', 'print_token'],
-            'foreign_ministry': ['view_dashboard', 'create_form', 'view_etd_data', 'print_token'],
-            'hq': ['view_dashboard', 'view_details', 'send_verification', 'approve_applications'],
-            'headquarters': ['view_dashboard', 'view_details', 'send_verification', 'approve_applications'],
-            'agency': ['view_dashboard', 'verify_documents', 'upload_files', 'process_applications'],
-            'processing_agency': ['view_dashboard', 'verify_documents', 'upload_files', 'process_applications'],
-            'admin': ['view_dashboard', 'manage_users', 'view_all_applications', 'system_config'],
-            'super_admin': ['*'] // All permissions
-        };
-
-        return permissionMapping[role.toLowerCase()] || ['view_dashboard'];
-    }
-
-    async logout() {
-        try {
-            const response = await authFetch(`${this.authUrl}/logout`, {
-                method: 'POST'
-            });
-
-            return {
-                success: response.ok,
-                data: response.ok ? await response.json() : null
-            };
-        } catch (error) {
-            console.error('Logout API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async refreshToken() {
-        try {
-            const response = await authFetch(`${this.authUrl}/refresh`, {
-                method: 'POST'
-            });
-
-            if (!response.ok) {
-                throw new Error('Token refresh failed');
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
             }
-
-            const data = await response.json();
-            return {
-                success: true,
-                token: data.token
-            };
-        } catch (error) {
-            console.error('Token refresh error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Users API Methods
-    async getCurrentUser() {
-        try {
-            const response = await authFetch(`${this.usersUrl}/me`);
             
-            if (!response.ok) {
-                throw new Error('Failed to get user info');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
+            return response;
         } catch (error) {
-            console.error('Get user API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
+            console.error(`API Error (${endpoint}):`, error);
+            throw error;
         }
     }
 
-    async updateUser(userId, userData) {
-        try {
-            const response = await authFetch(`${this.usersUrl}/${userId}`, {
-                method: 'PUT',
-                body: JSON.stringify(userData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update user');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Update user API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
+    async login(email, password) {
+        const response = await this.request('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+        });
+        
+        if (response.token) {
+            this.setAuthToken(response.token);
+            this.setUser(JSON.stringify(response.user))
         }
+        
+        return response;
     }
 
-    async getUsers(filters = {}) {
-        try {
-            const queryParams = new URLSearchParams(filters);
-            const response = await authFetch(`${this.usersUrl}?${queryParams}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get users');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get users API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async createUser(userData) {
+        return await this.request('/auth/admin/create-user', {
+            method: 'POST',
+            body: JSON.stringify(userData),
+        });
     }
 
-    // Applications API Methods
+    async getAllUsers() {
+        return await this.request('/users');
+    }
+
+    async getCurrentUserProfile() {
+        return await this.request('/users/profile');
+    }
+
     async createApplication(applicationData) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}`, {
-                method: 'POST',
-                body: JSON.stringify(applicationData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Create application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+        return await this.request('/applications', {
+            method: 'POST',
+            body: JSON.stringify(applicationData),
+        });
     }
 
-    async getApplication(applicationId) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getAllApplications(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        const endpoint = `/applications${queryString ? '?' + queryString : ''}`;
+        return await this.request(endpoint);
     }
 
-    async updateApplication(applicationId, applicationData) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}`, {
-                method: 'PUT',
-                body: JSON.stringify(applicationData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Update application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getApplicationById(id) {
+        return await this.request(`/applications/${id}`);
     }
 
-    async getApplications(filters = {}) {
-        try {
-            const queryParams = new URLSearchParams(filters);
-            const response = await authFetch(`${this.applicationsUrl}?${queryParams}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get applications');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get applications API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async updateApplication(id, applicationData) {
+        return await this.request(`/applications/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(applicationData),
+        });
     }
 
-    async submitApplication(applicationId) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}/submit`, {
-                method: 'POST'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to submit application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Submit application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async reviewApplication(id, approved) {
+        return await this.request(`/applications/${id}/review`, {
+            method: 'PATCH',
+            body: JSON.stringify({ approved }),
+        });
     }
 
-    async approveApplication(applicationId, remarks = '') {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}/approve`, {
-                method: 'POST',
-                body: JSON.stringify({ remarks })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to approve application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Approve application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getAdminDashboardStats() {
+        return await this.request('/dashboard/admin/stats');
     }
 
-    async rejectApplication(applicationId, reason = '') {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}/reject`, {
-                method: 'POST',
-                body: JSON.stringify({ reason })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to reject application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Reject application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getAgencyApplications() {
+        return await this.request('/dashboard/agency/applications');
     }
 
-    // Documents API Methods
-    async getDocument(documentId) {
-        try {
-            const response = await authFetch(`${this.documentsUrl}/${documentId}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get document');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get document API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getMinistryApplications() {
+        return await this.request('/dashboard/ministry/applications');
     }
 
-    async getDocuments(filters = {}) {
-        try {
-            const queryParams = new URLSearchParams(filters);
-            const response = await authFetch(`${this.documentsUrl}?${queryParams}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get documents');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get documents API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    async getMissionOperatorSummary() {
+        return await this.request('/dashboard/mission-operator/summary');
     }
 
-    async createDocument(documentData) {
-        try {
-            const response = await authFetch(`${this.documentsUrl}`, {
-                method: 'POST',
-                body: JSON.stringify(documentData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create document');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Create document API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async updateDocument(documentId, documentData) {
-        try {
-            const response = await authFetch(`${this.documentsUrl}/${documentId}`, {
-                method: 'PUT',
-                body: JSON.stringify(documentData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update document');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Update document API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async deleteDocument(documentId) {
-        try {
-            const response = await authFetch(`${this.documentsUrl}/${documentId}`, {
-                method: 'DELETE'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete document');
-            }
-
-            return {
-                success: true
-            };
-        } catch (error) {
-            console.error('Delete document API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Upload API Methods
-    async uploadFile(file, metadata = {}) {
-        try {
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            // Add metadata
-            Object.keys(metadata).forEach(key => {
-                formData.append(key, metadata[key]);
-            });
-
-            const response = await fetch(`${this.uploadsUrl}`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${getToken()}`
-                    // Don't set Content-Type for FormData, let browser set it with boundary
-                },
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to upload file');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Upload file API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async uploadMultipleFiles(files, metadata = {}) {
-        try {
-            const uploadPromises = files.map(file => this.uploadFile(file, metadata));
-            const results = await Promise.all(uploadPromises);
-            
-            return {
-                success: true,
-                data: results
-            };
-        } catch (error) {
-            console.error('Upload multiple files API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async deleteFile(fileId) {
-        try {
-            const response = await authFetch(`${this.uploadsUrl}/${fileId}`, {
-                method: 'DELETE'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete file');
-            }
-
-            return {
-                success: true
-            };
-        } catch (error) {
-            console.error('Delete file API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async getFile(fileId) {
-        try {
-            const response = await authFetch(`${this.uploadsUrl}/${fileId}`);
-            
-            if (!response.ok) {
-                throw new Error('Failed to get file');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Get file API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // ETD Specific Methods
-    async generateTrackingId(applicationData) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/generate-tracking`, {
-                method: 'POST',
-                body: JSON.stringify(applicationData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to generate tracking ID');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Generate tracking ID API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async verifyApplication(applicationId, verificationData) {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}/verify`, {
-                method: 'POST',
-                body: JSON.stringify(verificationData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to verify application');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Verify application API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    async printDocument(applicationId, documentType = 'etd') {
-        try {
-            const response = await authFetch(`${this.applicationsUrl}/${applicationId}/print/${documentType}`, {
-                method: 'POST'
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to print document');
-            }
-
-            const data = await response.json();
-            return {
-                success: true,
-                data: data
-            };
-        } catch (error) {
-            console.error('Print document API error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
-    }
-
-    // Utility Methods
-    async checkApiHealth() {
-        try {
-            const response = await fetch(`${this.baseApiUrl}/health`);
-            return {
-                success: response.ok,
-                status: response.status
-            };
-        } catch (error) {
-            console.error('API health check error:', error);
-            return {
-                success: false,
-                error: error.message
-            };
-        }
+    logout() {
+        this.removeAuthToken();
     }
 
     isAuthenticated() {
-        return isLoggedIn();
+        return !!this.token;
+    }
+
+    getCurrentUser() {
+        if (!this.token) return null;
+        
+        try {
+            const payload = JSON.parse(atob(this.token.split('.')[1]));
+            return payload;
+        } catch (error) {
+            console.error('Failed to parse token:', error);
+            return null;
+        }
     }
 }
 
-// Create singleton instance
 const backendApiService = new BackendApiService();
 
-// Export both the instance and the class
-export default backendApiService;
-export { BackendApiService };
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = BackendApiService;
+} else {
+    window.BackendApiService = BackendApiService;
+    window.backendApiService = backendApiService;
+}

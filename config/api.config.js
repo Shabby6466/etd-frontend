@@ -8,6 +8,9 @@ const ApiConfig = {
         PASSPORT_API_KEY: '',
         PASSPORT_REQUESTER_ID: 'ministry_interior',
         
+        ETD_API_URL: '/api',
+        ETD_API_TIMEOUT: 30000,
+        
         API_TIMEOUT: 30000,
         API_RETRY_ATTEMPTS: 3,
         
@@ -23,6 +26,9 @@ const ApiConfig = {
         PASSPORT_API_KEY: '',
         PASSPORT_REQUESTER_ID: 'ministry_interior',
         
+        ETD_API_URL: 'https://staging-api.etd.gov.pk/api',
+        ETD_API_TIMEOUT: 30000,
+        
         API_TIMEOUT: 30000,
         API_RETRY_ATTEMPTS: 3,
         
@@ -37,6 +43,9 @@ const ApiConfig = {
         PASSPORT_API_URL: 'https://api.passport.gov.pk/v1/verify',
         PASSPORT_API_KEY: '',
         PASSPORT_REQUESTER_ID: 'ministry_interior',
+        
+        ETD_API_URL: 'http://localhost:3000/api',
+        ETD_API_TIMEOUT: 30000,
         
         API_TIMEOUT: 30000,
         API_RETRY_ATTEMPTS: 3,

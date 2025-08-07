@@ -27,7 +27,7 @@
             <div class="input-wrapper">
               <input class="input-box" type="password" id="password" placeholder="Enter your password" />
             </div>
-            <div class="input-wrapper">
+            <!-- <div class="input-wrapper">
               <select class="input-box" id="userRole" style="padding: 12px;">
                 <option value="">Select your role</option>
                 <option value="fm">Foreign Ministry</option>
@@ -35,9 +35,9 @@
                 <option value="agency">Processing Agency</option>
                 <option value="admin">Administrator</option>
               </select>
-            </div>
+            </div> -->
           </div>
-
+          <br>
 
           <div class="login-button">
             <button id="loginButton" style="all: unset; cursor: pointer;  color: white;">
@@ -61,9 +61,15 @@
     <img class="gov-bg" src="../../../public/assets/Gov.png" />
     <img class="dgip-logo" src="../../../public/assets/DGIP-logo.png" />
   </div>
-  <script src="../../scripts/role-manager.js"></script>
-  <script src="../../scripts/router.js"></script>
-  <script type="module" src="../../scripts/login-refactored.js"></script>
+  <!-- API Configuration -->
+  <script src="../../../config/api.config.js"></script>
+  
+  <!-- API Services -->
+  <script src="../../scripts/backend-api-service.js"></script>
+  <script src="../../scripts/auth-service.js"></script>
+  
+  <!-- Login Handler -->
+  <script src="../../scripts/login-handler.js"></script>
 </body>
 
 </html>
